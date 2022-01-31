@@ -24,6 +24,10 @@ kubectl cluster-info
 ```
 
 https://kubernetes.io/ru/docs/tasks/tools/install-minikube/#minikube-before-you-begin-2
+
 https://kubernetes.io/ru/docs/setup/learning-environment/minikube/
+
 https://minikube.sigs.k8s.io/docs/start/
+
 https://minikube.sigs.k8s.io/docs/drivers/
+
