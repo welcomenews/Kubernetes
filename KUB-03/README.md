@@ -13,6 +13,10 @@ git clone https://github.com/kubernetes-sigs/kubespray
 или
 https://gitlab.rebrainme.com/kubernetes_users_repos/1332/kub-03.git
 
+ssh-copy-id user@NODE-1IP
+ssh-copy-id user@NODE-2IP
+ssh-copy-id user@NODE-3IP
+
 pip3 install -r requirements.txt
 cp -pr inventory/sample inventory/local
 
