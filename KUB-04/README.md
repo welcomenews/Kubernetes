@@ -32,3 +32,6 @@ https://cloud.yandex.ru/docs/solutions/infrastructure-management/terraform-quick
 
 https://cloud.yandex.ru/docs/iam/concepts/authorization/oauth-token
 
+https://cloud.yandex.ru/docs/iam/quickstart-sa
+
+
