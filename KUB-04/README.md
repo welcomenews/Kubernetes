@@ -18,6 +18,30 @@
 
 
 ```
+# Если не срабатывает команда git clone , то выполняем команду 
+export GIT_SSL_NO_VERIFY=1
+
+https://gitlab.rebrainme.com/kubernetes_users_repos/1332/kub-04.git
+
+# Install terraform
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+sudo apt-get update && sudo apt-get install terraform
+
+# Install yandex cli
+curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+
+Install kubectl
+curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl && sudo chmod +x kubectl && sudo mv kubectl /usr/local/bin
+
+yc init
+terraform init
+terraform apply
+yc container cluster list
+yc container cluster get-credentials kub-test --external
+kubectl cluster-info
+kubectl get nodes
+kubectl label nodes --all status=done
 
 ```
 
