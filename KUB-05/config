@@ -1,0 +1,28 @@
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJ....
+    server: https://84.252.128.131
+  name: cluster-old
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUS...
+    server: https://165.22.27.118:6443
+  name: cluster-new
+contexts:
+- context:
+    cluster: cluster-old
+    user: user
+  name: context-old
+- context:
+    cluster: cluster-new
+    user: user
+  name: context-new
+current-context: context-old
+kind: Config
+preferences: {}
+users:
+- name: user 
+  user:
+    client-certificate-data: LS0tLS1CRUdJTiBDRV...
+    client-key-data: LS0tLS1CRUdJTiBSU0...
+    
