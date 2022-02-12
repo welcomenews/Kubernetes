@@ -15,7 +15,7 @@
 ## На ноде1
 git clone https://github.com/kubernetes-sigs/kubespray
 или
-https://gitlab.rebrainme.com/kubernetes_users_repos/1332/kub-03.git
+https://gitlab.rebrainme.com/kubernetes_users_repos/1332/kub-07.git
 
 ssh-copy-id user@NODE-1IP
 ssh-copy-id user@NODE-2IP
