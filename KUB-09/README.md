@@ -29,7 +29,7 @@ CONFIG_FILE=inventory/kuber/hosts.yaml python3 contrib/inventory_builder/invento
 
 # Заходим в group_vars/k8s-cluster и открываем файл k8s-cluster.yaml.
 container_manager: containerd
-network_plugin: flannel
+kube_network_plugin: flannel
 kubeconfig_localhost: true
 
 ## Заходим в inventory/kuber/group_vars/etcd.yaml
