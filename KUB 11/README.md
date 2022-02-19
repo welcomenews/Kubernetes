@@ -13,8 +13,7 @@ kubectl create -f ./stage-ns.yaml
 kubectl create -f ./dev-ns.yaml
 kubectl get namespaces
 
-##
-Правим конфиг для переключения на разные ns
+## Правим конфиг для переключения на разные ns
 kubectl config set-context stage --namespace=stage --cluster=kubernetes --user=kubernetes-admin
 kubectl config set-context dev --namespace=dev --cluster=kubernetes --user=kubernetes-admin
 kubectl config view
