@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis-kv
+  labels:
+    app: redis
+spec:
+  containers:
+  - image: redis
+    name: redis
+  - image: oliver006/redis_exporter
+    name: redis-exporter
