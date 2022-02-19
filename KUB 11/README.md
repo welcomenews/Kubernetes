@@ -11,14 +11,25 @@
 ## Создаём ns
 kubectl create -f ./stage-ns.yaml
 kubectl create -f ./dev-ns.yaml
+kubectl get namespaces
 
 ##
 Правим конфиг для переключения на разные ns
 kubectl config set-context stage --namespace=stage --cluster=kubernetes --user=kubernetes-admin
 kubectl config set-context dev --namespace=dev --cluster=kubernetes --user=kubernetes-admin
+kubectl config view
+
 
 kubectl apply -f ./redis-pod.yaml
 kubectl apply -f ./httpd-deployment.yaml
+
+kubectl get po
+kubectl get rs
+kubectl get deployment
+kubectl get pods --show-labels
+
+## увеличить количество реплик web-dp до 4 можно либо в файле httpd-deployment.yaml, либо командой ниже.
+kubectl scale deployment web-dp --replicas=4
 
 
 ```
