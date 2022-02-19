@@ -20,9 +20,11 @@ kubectl config set-context dev --namespace=dev --cluster=kubernetes --user=kuber
 kubectl config view
 
 kubectl config use-context stage
+kubectl config current-context
 kubectl apply -f ./redis-pod.yaml
 
 kubectl config use-context dev
+kubectl config current-context
 kubectl apply -f ./httpd-deployment.yaml
 
 kubectl get po
