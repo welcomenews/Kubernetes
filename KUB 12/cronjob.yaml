@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cron-test
+spec:
+  schedule: "*/10 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: cron
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: cron
+            image: alpine
+            command: ["curl"]
+            args: ["https://lk.rebrainme.com/kubernetes/report"]
+            
