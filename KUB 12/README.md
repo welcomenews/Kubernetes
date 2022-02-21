@@ -11,6 +11,11 @@ kubectl label nodes node3 usecase=loadbalancer
 kubectl apply -f ./daemonset.yaml
 kubectl apply -f ./cronjob.yaml
 
+kubectl get po -o wide
+kubectl get cronjob -o wide
+kubectl get all --all-namespaces
+kubectl get ds --all-namespaces
+
 ```
 
 https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
