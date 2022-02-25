@@ -1,14 +1,15 @@
 ##KUB 14: Параметры манифестов
 
-Создайте деплоймент с именем nginx-mf в namespace default со следующими правилами:
-Образ должен быть nginx:latest
-Добавьте label env=prod.
-Добавьте аннотацию prometheus.io/scrape=true.
-Добавьте liveness probe http на порт 80 с произвольными значениями period & delay.
-Добавьте readiness probe command с вызовом curl http://127.0.0.1:80.
+1. Создайте деплоймент с именем nginx-mf в namespace default со следующими правилами:
+2. Образ должен быть nginx:latest
+3. Добавьте label env=prod.
+4. Добавьте аннотацию prometheus.io/scrape=true.
+5. Добавьте liveness probe http на порт 80 с произвольными значениями period & delay.
+6. Добавьте readiness probe command с вызовом curl http://127.0.0.1:80.
 
 
 ```
+
 kubectl apply -f ./deploy.yaml
 
 ```
