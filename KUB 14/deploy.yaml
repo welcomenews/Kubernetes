@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-mf
+  # добавит лэйбл в deploy
+  labels:   
+    test: liveness
+    env: prod
+  annotations:
+    prometheus.io/scrape: "true"
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      env: prod
+  template:
+    metadata:
+        # добавит лэйбл в pod
+      labels:
+        env: prod
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 3
+          readinessProbe:
+            exec:
+              command:
+              - curl
+              - http://127.0.0.1:80
+              
