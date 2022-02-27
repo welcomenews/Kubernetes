@@ -1,0 +1,96 @@
+
+kubectl api-resources                         Смотреть api который предоставляет кубирнетес.
+kubectl api-versions                          Смотреть доступные версии api для каждой группы.
+kubectl cluster-info                          Отобразить информацию о кластере
+kubectl config view                           Показать объединённые настройки kubeconfig
+kubectl cluster-info dump --output-directory=/path/to/cluster-state   Записать дамп текущего состояния кластера в /path/to/cluster-state
+
+kubectl apply -f <имя файла.yml>             применить конфиг описаный в файле
+kubectl run -it --image ubuntu bash          запустить ubuntu и зайти в bash
+kubectl -n <найм_спэйс> delete po <имя_пода>   удаление пот с определённым именем.
+kubectl -n <найм_спэйс> get event -w         смотреть что происходит с подами
+kubectl -n <найм_спэйс> get pods             смотреть все поды в этом наймспэйсе
+kubectl -n <найм_спэйс> get pods -o wide     расширенный просмотр всех подов в этом наймспэйсе
+kubectl -n <найм_спэйс> get svc              смотреть какие есть сервисы.
+kubectl -n <найм_спэйс> get all               смотреть все ресурсы в данном наймсп
+kubectl get all --all-namespaces              смотреть все ресурсы из всех наймспэйсов
+kubectl get ds --all-namespaces               смотреть даймон сеты из всех наймспэйсов
+kubectl get pods --show-labels               Показывать метки для всех подов
+kubectl plugin list                         просмотреть все плагины, доступные для kubectl
+sudo kubectl get configmap                 ???
+kubectl get rs --namespace=kube-system     Смотреть количество реплик
+
+
+kubectl get services --sort-by=.metadata.name  Список служб, отсортированных по имени
+kubectl get pods --sort-by='.status.containerStatuses[0].restartCount'  Список модулей, отсортированных по количеству перезапусков
+kubectl get pv --sort-by=.spec.capacity.storage  Список PersistentVolumes, отсортированных по емкости
+
+kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="ExternalIP")].address}'  Получить внешние IP всех узлов
+
+
+kubectl -n <найм_спэйс> describe po <имя_пода>  смотреть всё описание пода
+kubectl -n <найм_спэйс> describe node <имя_пода>  смотреть всё описание ноды (кто и что использует)
+kubectl get pv                               смотреть волумы
+kubectl get namespaces                       смотреть какие наймспэйсы есть
+kubectl get storageclasses                   смотреть какие строраджи есть
+kubectl -n <найм_спэйс> storage get pvc     смотреть инфу по подключённому волуму.
+kubectl get node <имя объекта> -o yaml      вывести все параметры объекта в фотмату yaml
+kubectl get crd                             смотреть кастомные ресурсы.
+kubectl config get-contexts                 смотреть какой контекст сейчас используем и какие есть.
+kubectl config use-context <имя контекста>  переключиться на другой контекст
+kubectl config current-context              отображать текущий контекст
+KUBECONFIG=~/.kube/config:~/.kube/kubconfig2  использовать несколько файлов kubeconfig одновременно
+kubectl config view -o jsonpath='{.users[].name}'  показать первого пользователя
+kubectl config view -o jsonpath='{.users[*].name}' список пользователей
+
+kubectl apply -f ./my-manifest.yaml         создать ресурс(ы)
+kubectl apply -f ./my1.yaml -f ./my2.yaml   создать из нескольких файлов
+kubectl apply -f ./dir                      создать ресурс (ы) во всех файлах манифеста в каталоге
+kubectl apply -f https://git.io/vPieo       создать ресурс (ы) из URL
+
+kubectl create cronjob hello --image=busybox --schedule="*/1 * * * *" -- echo "Hello World"  создайте CronJob, который печатает «Hello World» каждую минуту
+
+kubectl rollout history deployment/frontend  Проверьте историю развертываний, включая ревизию
+kubectl rollout undo deployment/frontend     Откат к предыдущему развертыванию
+kubectl set image deployment/frontend www=image:v2   Последовательное обновление контейнеров «www» развертывания из «frontend», обновление образа
+kubectl rollout undo deployment/frontend --to-revision=2   Откат к определенной версии
+kubectl rollout status -w deployment/frontend  Наблюдайте за статусом непрерывного обновления развертывания из «frontend» до его завершения.
+kubectl rollout restart deployment/frontend    Последовательный перезапуск развертывания из «frontend»
+
+kubectl label pods my-pod new-label=awesome                 Добавить метку
+kubectl label node <nodename> <labelname>-                  Удалить метку у ноды
+kubectl annotate pods my-pod icon-url=http://goo.gl/XXBTWq  Добавить аннотацию
+kubectl autoscale deployment foo --min=2 --max=10           Автоматическое масштабирование развертывания "foo"
+kubectl scale --replicas=3 rs/foo                         Масштабирование набора реплик с именем «foo» до 3
+kubectl scale --replicas=3 -f foo.yaml                   Масштабируйте ресурс, указанный в «foo.yaml», до 3
+kubectl scale --current-replicas=2 --replicas=3 deployment/mysql   Если текущий размер развертывания с именем mysql равен 2, масштабируйте mysql до 3
+kubectl scale --replicas=5 rc/foo rc/bar rc/baz        Масштабирование нескольких контроллеров репликации
+
+kubectl edit svc/docker-registry                        Отредактируйте службу с именем docker-registry.
+KUBE_EDITOR="nano" kubectl edit svc/docker-registry     Используйте альтернативный редактор
+
+
+kubectl cordon <имя_пода>                    пометим наш узел как неназначаемый, чтобы на нем не могли запускаться поды
+kubectl drain <имя_пода> --ignore-daemonsets  заставить Kubernetes переместить текущие поды с этой ноды
+kubectl uncordon <имя_пода>                  вернуть ноду в рабочее состояние
+
+kubectl get podmetrics                       запускается metrics-server, который собирает базовые метрики — cpu & memory
+kubectl get nodemetrics
+kubectl get podmetrics <имя_пода> -o yaml
+kubectl top pods --all-namespaces            
+kubectl top nodes
+
+kubectl delete pods,services -l name=myLabel         Удалить поды и сервисы с меткой name=myLabel
+kubectl -n my-ns delete pod,svc --all                Удалить все поды и сервисы в пространстве имен my-ns
+
+kubectl cp /tmp/foo_dir my-pod:/tmp/bar_dir          Скопируйте локальный каталог /tmp/foo_dir в /tmp/bar_dir в удаленный под в текущем пространстве имен.
+kubectl cp /tmp/foo my-pod:/tmp/bar -c my-container  Скопируйте локальный файл /tmp/foo в /tmp/bar в удаленный под в определенном контейнере.
+kubectl cp /tmp/foo my-namespace/my-pod:/tmp/bar     Скопируйте локальный файл /tmp/foo в /tmp/bar в удаленный под в пространстве имен my-namespace
+kubectl cp my-namespace/my-pod:/tmp/foo /tmp/bar     Скопируйте /tmp/foo из удаленного пода в /tmp/bar на локальный клмпьютер
+
+
+
+
+curl -D - -s https://164.92.204.143:6443/api/v1/nodes
+curl -k -v -H "Accept: application/json" -XPATCH -d '{"metadata":{"labels":{"api":"true"}}}' -H "Content-Type:application/merge-patch+json" https://164.92.204.143:6443/api/v1/nodes/NODENAME
+curl --request PATCH --data '{"metadata":{"labels":{"api":"true"}}}' --cacert tmp/ca.crt --cert tmp/client.crt --key tmp/client.key  -H "Content-Type:application/json-patch+json" https://164.92.241.122:6443/api/v1/pods/PODNAME
