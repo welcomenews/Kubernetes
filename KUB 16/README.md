@@ -9,7 +9,7 @@
 ```
 kubectl label nodes --all usercase=workload
 ## если у пода нет такого параметра, то его не размещаем на этой ноде.
-kubectl taint nodes node1 dedicated=true:NoSchedule
+kubectl taint nodes node2 dedicated=true:NoSchedule
 
 kubectl apply -f ./deploy-label.yaml
 kubectl apply -f ./deploy-taint.yaml
