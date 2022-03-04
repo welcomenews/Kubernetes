@@ -23,6 +23,7 @@ spec:
       labels:
         usercase: workload
     spec:
+    ## nodeSelector с этим параметром поды будут запускаться на каждой ноде где есть эта метрика.
 #      nodeSelector:
 #        usercase: workload
       containers:
