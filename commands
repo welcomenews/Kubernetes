@@ -1,4 +1,5 @@
 
+
 kubectl api-resources                         Смотреть api который предоставляет кубирнетес.
 kubectl api-versions                          Смотреть доступные версии api для каждой группы.
 kubectl cluster-info                          Отобразить информацию о кластере
@@ -58,6 +59,7 @@ kubectl rollout status -w deployment/frontend  Наблюдайте за ста�
 kubectl rollout restart deployment/frontend    Последовательный перезапуск развертывания из «frontend»
 
 kubectl label pods my-pod new-label=awesome                 Добавить метку
+kubectl label nodes --all usercase=workload                 Добавить метку всем нодам
 kubectl label node <nodename> <labelname>-                  Удалить метку у ноды
 kubectl annotate pods my-pod icon-url=http://goo.gl/XXBTWq  Добавить аннотацию
 kubectl autoscale deployment foo --min=2 --max=10           Автоматическое масштабирование развертывания "foo"
@@ -87,7 +89,6 @@ kubectl cp /tmp/foo_dir my-pod:/tmp/bar_dir          Скопируйте лок
 kubectl cp /tmp/foo my-pod:/tmp/bar -c my-container  Скопируйте локальный файл /tmp/foo в /tmp/bar в удаленный под в определенном контейнере.
 kubectl cp /tmp/foo my-namespace/my-pod:/tmp/bar     Скопируйте локальный файл /tmp/foo в /tmp/bar в удаленный под в пространстве имен my-namespace
 kubectl cp my-namespace/my-pod:/tmp/foo /tmp/bar     Скопируйте /tmp/foo из удаленного пода в /tmp/bar на локальный клмпьютер
-
 
 
 
