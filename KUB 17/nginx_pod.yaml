@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+     - name: nginx
+       image: nginx
+       volumeMounts:
+       - name: site-data
+         mountPath: /etc/nginx/nginx.conf
+         subPath: nginx.conf
+       env:
+         - name: AUTH
+           valueFrom:
+             secretKeyRef:
+               name: nginx-env
+               key: AUTH
+       resources:
+           requests:
+               memory: "64Mi"
+               cpu: "250m"
+           limits:
+               memory: "64Mi"
+               cpu: "250m"	
+  volumes:
+        - name: site-data
+          configMap:
+              name: nginx-conf
+  restartPolicy: Never
+  
