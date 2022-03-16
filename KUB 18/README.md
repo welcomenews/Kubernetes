@@ -18,3 +18,5 @@ kubectl get results
 
 ```
 
+https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/
+
