@@ -1,0 +1,9 @@
+apiVersion: study.rebrainme.com/v1
+kind: Result
+metadata:
+  name: task1
+spec:
+  task: Simple Task
+  result: Complite
+  courses: five
+  
