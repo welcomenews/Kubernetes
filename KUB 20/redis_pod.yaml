@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis
+  namespace: default
+  labels:
+    app: redis
+spec:
+  containers:
+  - image: redis:latest
+    name: redis
+    resources:
+       requests:
+          memory: "64Mi"
+          cpu: "250m"
+       limits:
+          memory: "64Mi"
+          cpu: "250m"
+    volumeMounts:
+       - name: nfs-pvc
+         mountPath: "/data"
+  restartPolicy: "Never"
+  volumes:
+    - name: nfs-pvc
+      persistentVolumeClaim:
+        claimName: nfs-data
