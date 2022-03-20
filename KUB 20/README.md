@@ -12,6 +12,10 @@
 sudo apt-get update
 sudo apt-get install nfs-common
 
+## на ноде nfs
+sudo mkdir -p /opt/nfs/kubernetes/
+sudo chmod 777 /opt/nfs/kubernetes/
+
 ## на ноде1
 git clone https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner
 sed -i'' "s/namespace:.*/namespace: provisioner/g" ./deploy/rbac.yaml ./deploy/deployment.yaml
