@@ -18,6 +18,9 @@ sudo chmod 777 /opt/nfs/kubernetes/
 
 ## на ноде1
 git clone https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner
+или
+https://gitlab.rebrainme.com/kubernetes_users_repos/1332/kub-20.git
+
 sed -i'' "s/namespace:.*/namespace: provisioner/g" ./deploy/rbac.yaml ./deploy/deployment.yaml
 kubectl create ns provisioner
 
