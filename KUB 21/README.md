@@ -50,6 +50,10 @@ kubectl get po
 ```
 
 
+https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+
+https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/
+
 https://github.com/bitnami/bitnami-docker-zookeeper
 
 https://github.com/bitnami/bitnami-docker-kafka
