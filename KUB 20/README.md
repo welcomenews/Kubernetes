@@ -26,7 +26,7 @@ kubectl create ns provisioner
 
 kubectl apply -f deploy/rbac.yaml
 
-## редактируем имя и IP
+## редактируем IP от nfs
 vim deploy/deployment.yaml
 kubectl apply -f deploy/deployment.yaml
 
