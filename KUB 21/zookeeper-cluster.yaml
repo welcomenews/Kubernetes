@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: zookeeper-deployment
+  namespace: default
+spec:
+  serviceName: zoo1
+  replicas: 3
+  selector:
+    matchLabels:
+      app: zookeeper
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      containers:
+      - name: zoo1
+        image: bitnami/zookeeper:latest
+        ports:
+        - containerPort: 2181
+        env:
+        ## For safety reasons, do not use this flag in a production environment.
+        - name: ALLOW_ANONYMOUS_LOGIN
+          value: "yes"
+        volumeMounts:
+          - name: zookeeper-volume
+            mountPath: "/var/lib/zookeeper"
+  volumeClaimTemplates:
+  - metadata:
+      name: zookeeper-volume
+    spec:
+      storageClassName: nfs-client
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zoo1
+  namespace: default
+  labels:
+    app: zookeeper
+spec:
+  ports:
+  - name: client
+    port: 2181
+    protocol: TCP
+  - name: follower
+    port: 2888
+    protocol: TCP
+  - name: leader
+    port: 3888
+    protocol: TCP
+  selector:
+    app: zookeeper
