@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1 
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  namespace: default
+spec:
+  rules:
+  - host: ingress.d6315.task22.rbr-kubernetes.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: svc-internal
+            port:
+               number: 80
+        path: /
+        pathType: Prefix
+        
