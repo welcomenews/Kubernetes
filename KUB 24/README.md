@@ -17,6 +17,8 @@ kubectl apply -f ./deployment_nginx.yaml
 
 curl -X POST "https://api.cloudflare.com/client/v4/zones/9152ec3c08b1a4faeaa95353a929fcc5/dns_records" -H "Authorization: Bearer dfg..." -H "Content-Type:application/json" --data '{"type":"A","name":"ingress.d6315.task22.rbr-kubernetes.com","content":"157.245.18.47","proxied":false}'
 
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.1.0/cert-manager.yaml
+
 kubectl apply -f ./sert_manager_nginx.yaml
 
 kubectl apply -f ./ingress_nginx.yaml
