@@ -28,6 +28,7 @@ kubectl get svc -A
 kubectl get deploy -A
 kubectl get ingress -A
 kubectl get ClusterIssuer
+kubectl get secret
 
 ```
 
