@@ -33,3 +33,7 @@ kubectl get deploy -A
 
 https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/
 
+https://github.com/kubernetes/ingress-nginx/tree/main/docs/examples/auth/basic
+
+
+
