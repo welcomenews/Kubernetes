@@ -1,4 +1,4 @@
-KUB 22: Управление входящими соединениями — ingress
+## KUB 22: Управление входящими соединениями — ingress
 
 1. Установите nginx-ingress контроллер в namespace ingress-nginx
 2. Проверьте какой IP адрес получил service LoadBalancer в namespace ingress-nginx
