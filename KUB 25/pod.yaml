@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  namespace: default
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+    resources:
+       requests:
+          memory: "64Mi"
+          cpu: "250m"
+       limits:
+          memory: "64Mi"
+          cpu: "250m"
+    ports:
+    - containerPort: 8080
+    
