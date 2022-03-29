@@ -26,9 +26,10 @@ kubectl apply -f ./alpine_def.yaml
 kubectl apply -f ./vpa_def.yaml
 
 kubectl describe po
-kubectl get HorizontalPodAutoscaler
+kubectl get VerticalPodAutoscaler
 kubectl get deploy
 kubectl describe deploy
+kubectl describe VerticalPodAutoscaler
 
 ```
 
