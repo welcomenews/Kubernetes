@@ -1,0 +1,6 @@
+
+helm get manifest <имя релиза>                                                   Получить релиз и увидить все загруженные шаблоны.
+helm install <имя релиза> ./mychart --dry-run --debug                            Смотреть как будет выглядить чарт
+helm install <имя релиза> ./mychart --dry-run --debug --set favoriteDrink=slurm  Переопределяем значение favoriteDrink
+helm install --dry-run --disable-openapi-validation <имя релиза> ./mychart       Чтобы увидеть, что визуализируется без вывода ошибок
+
