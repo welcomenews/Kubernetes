@@ -38,6 +38,20 @@ helm rollback local-chart 1 -n helm
 kubectl get po -n helm
 
 
+## Если хотим через зависимость поставить nginx-ingress контроллер
+https://stackoverflow.com/questions/60749509/custom-helm-chart-helm-dep-update-fails-with-error-stable-nginx-ingress-chart
+
+git clone https://github.com/helm/charts.git
+cp -r charts/stable/nginx-ingress /path/to/acmes-parent-dir/
+## Then you can use a relative reference to the local directory:
+
+dependencies:
+- name: nginx-ingress
+  version: "1.34"
+  repository: "file://../nginx-ingress"
+
+
+
 ```
 
 ```
@@ -47,7 +61,9 @@ https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-h
 
 https://helm.sh/docs/helm/helm_history/
 
+https://stackoverflow.com/questions/60749509/custom-helm-chart-helm-dep-update-fails-with-error-stable-nginx-ingress-chart
 
+https://github.com/helm/charts/tree/master/stable
 
 
 
