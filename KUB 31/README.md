@@ -28,7 +28,7 @@ rm secrets.prod.yaml
 mv tmp secrets.prod.yaml
 
 sops -d secrets.prod.yaml
-git push ...
+git push https://gitlab.rebrainme.com/kubernetes_users_repos/1332/kub-31.git
 
 
 ```
