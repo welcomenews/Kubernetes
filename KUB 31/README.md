@@ -4,8 +4,8 @@
 2. Создайте ветку secrets.
 3. Сгенерируйте собственный gpg-ключ.
 4. Внутри папки .infra, создайте файл secrets.prod.yaml, который будет содержать список private_env_variables, внутри которого будут указаны переменные (переменные надо взять из values.prod.yaml):
-API_KEY
-PGSQL_URI
+* API_KEY
+* PGSQL_URI
 5. Удалите переменные API_KEY / PGSQL_URI из values.prod.yaml.
 6. В итоге у вас должно получиться два файла - values.prod.yaml, который содержит public_env_variables (LISTEN) и secrets.prod yaml, который содержит private_env_variables (API_KEY / PGSQL_URI).
 7. Зашифруйте secrets.prod.yaml с помощью sops и ключа, сгенерированного в пункте 3.
