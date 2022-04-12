@@ -47,4 +47,4 @@ curl -X POST "https://api.cloudflare.com/client/v4/zones/9152ec3c08b1a4faeaa9535
 
 ```
 
-
+https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
