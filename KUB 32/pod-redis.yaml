@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis-pod
+  namespace: default
+  labels:
+    app: redis
+spec:
+  containers:
+  - image: redis:latest
+    name: redis
+    resources:
+       requests:
+          memory: "64Mi"
+          cpu: "250m"
+       limits:
+          memory: "64Mi"
+          cpu: "250m"
+  - image: oliver006/redis_exporter
+    name: redis-exporter
+    resources:
+       requests:
+          memory: "64Mi"
+          cpu: "250m"
+       limits:
+          memory: "64Mi"
+          cpu: "250m"
+    ports:
+    - containerPort: 9121
+      name: redis-exp
+  restartPolicy: "Never"
+  
+  
