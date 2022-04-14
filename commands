@@ -76,9 +76,9 @@ kubectl cordon <имя_пода>                    пометим наш узе
 kubectl drain <имя_пода> --ignore-daemonsets  заставить Kubernetes переместить текущие поды с этой ноды
 kubectl uncordon <имя_пода>                  вернуть ноду в рабочее состояние
 
-kubectl get podmetrics                       запускается metrics-server, который собирает базовые метрики — cpu & memory
-kubectl get nodemetrics
-kubectl get podmetrics <имя_пода> -o yaml
+kubectl get podmetrics                       просмотреть metrics-server, который собирает базовые метрики — cpu & memory
+kubectl get nodemetrics                       --//--
+kubectl get podmetrics <имя_пода> -o yaml    смотреть метрики конкретного пода (загрузка cpu, mem)
 kubectl top pods --all-namespaces            
 kubectl top nodes
 
