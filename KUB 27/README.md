@@ -22,6 +22,7 @@ kubectl get HorizontalPodAutoscaler
 kubectl get deploy
 kubectl describe po alpine-dp-754fc48444-rhp2k
 kubectl describe node node2
+kubectl get podmetrics 
 
 ```
 
