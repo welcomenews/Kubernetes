@@ -1,3 +1,4 @@
+```
 
 1.
 wget https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
@@ -112,3 +113,5 @@ spec:
     pods:
       metricName: http_requests
       targetAverageValue: 2000m
+
+```
