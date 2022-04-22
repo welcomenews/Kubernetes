@@ -1,10 +1,17 @@
-```
+## KUB 33: Custom Metrics для HPA
 
+1. Установите metrics server в kubernetes кластер.
+2. Установите prometheus stack в namespace monitoring.
+3. Создайте дейплоймент whoami-dp в namespace default, который внутри будет запускать контейнер whoami.
+4. Создайте podmonitor whoami-monitor в namespace default, который будет собирать метрики с подов whoami.
+5. Установите prometheus-adapter в namespace monitoring.
+6. Создайте HorizontalPodAutoScaler hpa-whoami в namespace default, который будет увеличивать количество реплик данного деплоймента при достижении http_requests более 1ого запроса в секунду..
+
+```
 1.
 wget https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 ## правим, добавляем --kubelet-insecure-tls в args:
 vim components.yaml
-
 kubectl apply -f ./components.yaml
 
 kubectl api-resources
@@ -20,66 +27,29 @@ echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt
 sudo apt-get update
 sudo apt-get install helm
 
+## Установите nginx-ingress контроллер в namespace ingress-nginx
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.41.2/deploy/static/provider/cloud/deploy.yaml
+
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo add stable https://charts.helm.sh/stable
 helm repo update
 helm  pull prometheus-community/kube-prometheus-stack
-tar zxf kube-prometheus-stack-34.9.0.tgz
-rm kube-prometheus-stack-34.9.0.tgz
+tar zxf kube-prometheus-stack-34.10.0.tgz
+rm kube-prometheus-stack-34.10.0.tgz
 cp kube-prometheus-stack/values.yaml values.dev.yaml
 ## Включаем grafana, alertmanager, prometheus
 vim values.dev.yaml
+
 ## install chart
 helm -n monitoring upgrade --install prometheus-stack -f values.dev.yaml ./kube-prometheus-stack/
 kubectl get ing -n monitoring
 
 3.
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: whoami-dp
-  namespace: default
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: whoami
-  template:
-    metadata:
-      labels:
-        app: whoami
-    spec:
-      containers:
-        - name: whoami
-          image: bee42/whoami:2.2.0
-          ports:
-          - containerPort: 80
-            name: web
-          resources:
-            requests:
-               memory: "128Mi"
-               cpu: "200m"
-            limits:
-               memory: "128Mi"
-               cpu: "200m"
-
+kubectl apply -f ./pods.yaml
 kubectl get po
 
 4.
-apiVersion: monitoring.coreos.com/v1
-kind: PodMonitor
-metadata:
-  name: whoami-monitor
-  namespace: default
-  labels:
-    release: prometheus-stack
-spec:
-  selector:
-    matchLabels:
-      app: whoami
-  podMetricsEndpoints:
-  - port: web
-
+kubectl apply -f ./PodMonitor.yaml
 kubectl get PodMonitor
 kubectl get podmetrics
 
@@ -87,31 +57,21 @@ kubectl get podmetrics
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 helm pull prometheus-community/prometheus-adapter
-tar zxf prometheus-adapter-2.8.0.tgz
-rm ...
-vim ...
+tar zxf prometheus-adapter-3.2.1.tgz
+rm prometheus-adapter-3.2.1.tgz
+vim values.yaml
+
+## обратите внимание на переменную metricsRelistInterval — она должна быть равна или больше значения ScrapeInterval в Prometheus, иначе метрики из Kubernetes иногда могут пропадать.
+## prometheus: url - prometheus-stack-kube-prom-prometheus.monitoring.kis.im
+## важно поменять dnsPolicy на ClusterFirst
+
 helm -n monitoring upgrade --install prometheus-adapter -f values.yaml ./
+kubectl -n monitoring get deploy prometheus-adapter
 
-kubectl -n  monitoring get deploy prometheus-adapter
+kubectl apply -f ./HorizontalPodAutoscaler.yaml
+kubectl get HorizontalPodAutoscaler
 
-
-6.
-apiVersion: autoscaling/v2beta1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: hpa-whoami
-  namespace: default
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: whoami-dp
-  minReplicas: 1
-  maxReplicas: 5
-  metrics:
-  - type: Pod
-    pods:
-      metricName: http_requests
-      targetAverageValue: 2000m
 
 ```
+
+
