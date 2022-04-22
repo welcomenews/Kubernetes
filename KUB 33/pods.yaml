@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whoami-dp
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: whoami
+  template:
+    metadata:
+      labels:
+        app: whoami
+    spec:
+      containers:
+        - name: whoami
+          image: bee42/whoami:2.2.0
+          ports:
+          - containerPort: 80
+            name: web
+          resources:
+            requests:
+               memory: "128Mi"
+               cpu: "200m"
+            limits:
+               memory: "128Mi"
+               cpu: "200m"
+               
+               
