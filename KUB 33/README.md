@@ -68,10 +68,22 @@ vim values.yaml
 helm -n monitoring upgrade --install prometheus-adapter -f values.yaml ./
 kubectl -n monitoring get deploy prometheus-adapter
 
+6.
 kubectl apply -f ./HorizontalPodAutoscaler.yaml
 kubectl get HorizontalPodAutoscaler
 
 
 ```
+
+https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-metrics-apis
+
+https://github.com/kubernetes-sigs/prometheus-adapter
+
+https://github.com/kubernetes-sigs/prometheus-adapter/blob/master/docs/walkthrough.md
+
+https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/
+
+https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#autoscale
+
 
 
