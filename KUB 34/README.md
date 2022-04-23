@@ -44,6 +44,9 @@ helm -n logging upgrade --install kibana -f values.kibana.yaml ./kibana
 
 kubectl get ing -A
 
+## Добавляем DNS запись
+curl -X POST "https://api.cloudflare.com/client/v4/zones/915..../dns_records" -H "Authorization: Bearer r6E...." -H "Content-Type:application/json" --data '{"type":"A","name":"ingress.06806.task34.rbr-kubernetes.com","content":"134.209.135.50","proxied":false}'
+
 ## Заходим, проверяем на указанный хост 
 http://ingress.06806.task34.rbr-kubernetes.com
 
