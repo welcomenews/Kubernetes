@@ -18,6 +18,7 @@ spec:
                number: 80
         path: /
         pathType: Prefix
+  # Указываем настройки для tls — для какого хоста нужен tls и куда сохранить полученный сертификат
   tls:
   - hosts:
     - ingress.9a25c.task24.rbr-kubernetes.com
