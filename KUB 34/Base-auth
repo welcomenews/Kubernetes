@@ -184,7 +184,7 @@ ingress "kibana-ingress" created.
 
 Давайте создадим файл авторизации с именем пользователя и паролем.
 
-$ htpasswd -c auth kibanaadmin
+$ htpasswd -c basic-auth kibanaadmin
 New password: <kibanaadmin>
 New password:
 Re-type new password:
