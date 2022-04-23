@@ -29,6 +29,7 @@ sudo apt-get install helm
 
 ## Установите nginx-ingress контроллер в namespace ingress-nginx
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.41.2/deploy/static/provider/cloud/deploy.yaml
+kubectl -n ingress-nginx get svc
 
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo add stable https://charts.helm.sh/stable
