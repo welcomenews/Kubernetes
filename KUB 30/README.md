@@ -11,6 +11,7 @@ kubectl create namespace helm
 
 ## Установите nginx-ingress контроллер
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.41.2/deploy/static/provider/cloud/deploy.yaml
+kubectl -n ingress-nginx get svc
 
 ## Installing Helm
 curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
