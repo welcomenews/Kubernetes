@@ -11,6 +11,7 @@
 ```
 ## Установите nginx-ingress контроллер
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.41.2/deploy/static/provider/cloud/deploy.yaml
+kubectl -n ingress-nginx get svc
 
 git clone https://gitlab.rebrainme.com/kubernetes_users_repos/1332/kub-29.git
 helm template --namespace=helm ./local-chart/
