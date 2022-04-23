@@ -1,0 +1,199 @@
+Как настроить Kubernetes ingress controller для аутентификации приложений
+
+
+Kubernetes Ingress переопределил маршрутизацию в эту эпоху контейнеризации, и со всеми этими методами маршрутизации мысль «Мой маршрутизатор мои правила» кажется реальной.
+
+Мы используем nginx-ingress в качестве службы маршрутизации для наших приложений.
+
+Существует гораздо больше, чем просто маршрутизация, которую мы можем настроить с помощью ingress.
+
+Одной из важных функций является настройка аутентификации для нашего приложения.
+
+Поскольку весь трафик идет с ingress на наш сервис, имеет смысл настроить аутентификацию.
+
+Как упоминалось в репозитории, доступны разные типы аутентификации, включая:
+
+Базовая аутентификация ( basic )
+Аутентификации по сертификатам
+Внешняя аутентификация
+Oauth внешняя аутентификация
+В этом руководстве мы настроим аутентификацию на примере приложения, используя базовую технику (basic) аутентификации Ingress.
+
+Предпосылки
+Доступ к рабочему кластеру kubernetes.
+Понимание терминов Kubernetes, таких как поды, развертывания, службы, configmap, ingess и annotations
+Сначала давайте создадим ресурсы для Ingress из вышеприведенного примера, выполнив следующую команду.
+$ kubectl create -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml
+namespace "ingress-nginx" created
+deployment "default-http-backend" created
+service "default-http-backend" created
+configmap "nginx-configuration" created
+configmap "tcp-services" created
+configmap "udp-services" created
+serviceaccount "nginx-ingress-serviceaccount" created
+clusterrole "nginx-ingress-clusterrole" created
+role "nginx-ingress-role" created
+rolebinding "nginx-ingress-role-nisa-binding" created
+clusterrolebinding "nginx-ingress-clusterrole-nisa-binding" created
+deployment "nginx-ingress-controller" created
+Теперь, когда ресурсы ингресса созданы, нам нужен сервис для доступа к нему.
+
+Используйте следующий манифест, чтобы создать сервис:
+
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+  labels:
+    k8s-addon: ingress-nginx.addons.k8s.io
+  name: ingress-nginx
+  namespace: ingress-nginx
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: http
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: ingress-nginx
+  type: LoadBalancer
+Теперь давайте получим ендпоинт ELB и привяжем его к какому-нибудь доменному имени.
+$kubectl create -f ingress-service.yml
+service ingress-nginx created
+
+$ kubectl -n ingress-nginx get svc  ingress-nginx -o wide
+NAME            CLUSTER-IP      EXTERNAL-IP                                                               PORT(S)                      AGE       SELECTOR
+ingress-nginx   100.71.250.56   abcghccf8540698e8bff782799ca8h04-1234567890.us-east-2.elb.amazonaws.com   80:30032/TCP,443:30108/TCP   10s       app=ingress-nginx
+Давайте создадим развертывание и сервис для нашего примера приложения kibana.
+Нам нужен elasticsearch для запуска Kibana.
+
+Вот манифест для примера приложения.
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: kibana
+  name: kibana
+  namespace: ingress-nginx
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+       - image: kibana:latest
+         name: kibana
+         ports:
+           - containerPort: 5601
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+  labels:
+    app: kibana
+  name: kibana
+  namespace: ingress-nginx
+
+spec:
+  ports:
+  - name: kibana
+    port: 5601
+    targetPort: 5601
+  selector:
+    app: kibana
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: elasticsearch
+  name: elasticsearch
+  namespace: ingress-nginx
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+    spec:
+      containers:
+       - image: elasticsearch:latest
+         name: elasticsearch
+         ports:
+           - containerPort: 5601
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+  labels:
+    app: elasticsearch
+  name: elasticsearch
+  namespace: ingress-nginx
+spec:
+  ports:
+  - name: elasticsearch
+    port: 9200
+    targetPort: 9200
+  selector:
+    app: elasticsearch
+Создайте  приложение.
+kubectl apply -f kibana.yml
+deployment "kibana" created
+service "kibana" created
+deployment "elasticsearch" created
+service "elasticsearch" created
+Теперь, когда мы создали ресурсы приложения и игресса, пришло время создать сам Ingress и получить доступ к приложению.
+
+Используйте следующий манифест:
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+  name: kibana-ingress
+  namespace: ingress-nginx
+spec:
+  rules:
+    - host: logstest.myapp-staging.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: kibana
+              servicePort: 5601
+$kubectl -n ingress-nginx create -f ingress.yml
+ingress "kibana-ingress" created.
+Теперь, когда наше приложение запущено, когда мы можем получить доступ к панели мониторинга Kibana с помощью URL-адреса http://logstest.myapp-staging.com, у нас есть прямой доступ к нашей панели инструментов Kibana, и любой пользователь с этим URL может получить доступ к журналам.
+Теперь давайте настроим базовую аутентификацию с использованием htpasswd.
+
+Следуйте приведенным ниже командам, чтобы сгенерировать секрет для учетных данных.
+
+Давайте создадим файл авторизации с именем пользователя и паролем.
+
+$ htpasswd -c auth kibanaadmin
+New password: <kibanaadmin>
+New password:
+Re-type new password:
+Adding password for user kibanaadmin
+Используйте следующие аннотации в нашем манифесте ingress:
+kubectl -n ingress-nginx edit ingress kibana-ingress
+Вставьте следующие аннотации:
+nginx.ingress.kubernetes.io/auth-type: basic
+nginx.ingress.kubernetes.io/auth-secret: basic-auth
+nginx.ingress.kubernetes.io/auth-realm: "Kibana Authentication Required - kibanaadmin"
+Теперь, когда Ingress обновлен, снова перейдите на тот URL-адрес, и, вас  уже попросят пройти аутентификацию.
+
