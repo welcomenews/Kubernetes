@@ -4,9 +4,12 @@
 
 
 ```
-## Helm
-...
-
+## install helm
+curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
+sudo apt-get install apt-transport-https --yes
+echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt-get update
+sudo apt-get install helm
 
 ## Установите nginx-ingress контроллер в namespace ingress-nginx
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.41.2/deploy/static/provider/cloud/deploy.yaml
@@ -50,6 +53,7 @@ curl -X POST "https://api.cloudflare.com/client/v4/zones/915..../dns_records" -H
 ## Заходим, проверяем на указанный хост 
 http://ingress.06806.task34.rbr-kubernetes.com
 
+kubectl get po -A
 
 ```
 
