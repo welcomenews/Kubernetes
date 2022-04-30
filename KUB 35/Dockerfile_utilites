@@ -21,9 +21,10 @@ RUN apk --no-cache add \
         git \
         gnupg
 
-RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
-    chmod +x ./kubectl && \
-    mv ./kubectl /usr/local/bin/kubectl
+## Install Kubectl
+#RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
+#    chmod +x ./kubectl && \
+#    mv ./kubectl /usr/local/bin/kubectl
 
 RUN curl -O https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz && \
     tar xzf helm-v${HELM_VERSION}-linux-amd64.tar.gz && \
