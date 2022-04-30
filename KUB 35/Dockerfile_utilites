@@ -41,7 +41,7 @@ RUN apk add --no-cache python3 py3-pip \
     && pip3 install awscli \
     && rm -rf /var/cache/apk/*
 
-RUN curl -L -o /usr/local/bin/kubedog https://dl.bintray.com/flant/kubedog/${KUBEDOG_VERSION}/kubedog-linux-amd64-${KUBEDOG_VERSION} && \
+RUN curl -L -o /usr/local/bin/kubedog https://tuf.kubedog.werf.io/targets/releases/${KUBEDOG_VERSION}/linux-amd64/bin/kubedog && \
     chmod +x /usr/local/bin/kubedog
 
 VOLUME ["/root/.config"]
