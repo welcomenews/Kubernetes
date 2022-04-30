@@ -16,7 +16,7 @@ gpg --gen-key
 ## Шифруем secrets.test.yaml
 sops -e private_env_varibles --pgp .... secrets.test.yaml
 
-
+kubectl create namespace test
 
 
 
