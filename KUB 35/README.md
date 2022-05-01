@@ -14,7 +14,7 @@ sops -v
 gpg --gen-key
 
 ## Шифруем secrets.test.yaml
-sops -e private_env_varibles --pgp .... secrets.test.yaml
+sops --ignore-mac --encrypted-suffix private_env_varibles --pgp .... secrets.test.yaml
 
 ## Установите nginx-ingress контроллер в namespace ingress-nginx
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.41.2/deploy/static/provider/cloud/deploy.yaml
@@ -31,7 +31,7 @@ gpg --armor --export-secret-key <key pgp>
 ## Создать токен settings -> Access Tokens имя любое. 
 
 ## Создаём данные для аунтификации на gitlab (чтобы кубер мог скачать образ)
-kubectl -n test creat secret docker-registry gitlab-secret --docker-username=welcome-news_at_mail_ru --docker-password=glp... --docker-server=registry.gitlab.com
+kubectl -n test create secret docker-registry gitlab-secret --docker-username=welcome-news_at_mail_ru --docker-password=glp... --docker-server=registry.gitlab.com
 
 ## Редактируем сервисный аккаунт дефолт
 kubectl -n test edit sa default
