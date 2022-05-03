@@ -13,6 +13,9 @@ sops -v
 ## сгенерируем приватный pgp ключ (указали только свое имя и email адрес)
 gpg --gen-key
 
+## clone repo
+https://gitlab.rebrainme.com/kubernetes_users_repos/1332/kub-35.git
+
 ## Шифруем secrets.test.yaml
 sops -e --encrypted-suffix private_env_varibles --pgp ... secrets.yaml > secrets.test.yaml
 
@@ -31,7 +34,7 @@ gpg --armor --export-secret-key <key pgp>
 ## Создать токен settings -> Access Tokens имя любое. 
 
 ## Создаём данные для аунтификации на gitlab (чтобы кубер мог скачать образ)
-kubectl -n test create secret docker-registry gitlab-secret --docker-username=welcome-news_at_mail_ru --docker-password=glp... --docker-server=registry.gitlab.com
+kubectl -n test create secret docker-registry gitlab-secret --docker-username=welcome-news_at_mail_ru --docker-password=glp... --docker-server=registry.rebrainme.com
 или
 ## Нужно!
 sudo chmod 666 /var/run/docker.sock
@@ -47,6 +50,10 @@ imagePullSecrets:
 
 kubectl -n test get sa default -o yaml
 
-
+##
+kubectl -n test run alpine --image alpine -- ping 8.8.8.8
+kubectl -n test exec -it alpine -- sh
+apk add curl
+curl -D - app-svc
 
 ```
