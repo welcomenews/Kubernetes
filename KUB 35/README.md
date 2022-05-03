@@ -32,6 +32,12 @@ gpg --armor --export-secret-key <key pgp>
 
 ## Создаём данные для аунтификации на gitlab (чтобы кубер мог скачать образ)
 kubectl -n test create secret docker-registry gitlab-secret --docker-username=welcome-news_at_mail_ru --docker-password=glp... --docker-server=registry.gitlab.com
+или
+## Нужно!
+sudo chmod 666 /var/run/docker.sock
+docker login https://gitlab.rebrainme.com/kubernetes_users_repos/1332/kub-35/
+kubectl -n test create secret generic gitlab-secret --from-file=.dockerconfigjson=/home/user/.docker/config.json --type=kubernetes.io/dockerconfigjson
+
 
 ## Редактируем сервисный аккаунт дефолт
 kubectl -n test edit sa default
