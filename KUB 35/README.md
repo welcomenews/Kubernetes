@@ -14,7 +14,7 @@ sops -v
 gpg --gen-key
 
 ## Шифруем secrets.test.yaml
-sops --ignore-mac --encrypted-suffix private_env_varibles --pgp .... secrets.test.yaml
+sops -e --encrypted-suffix private_env_varibles --pgp ... secrets.yaml > secrets.test.yaml
 
 ## Установите nginx-ingress контроллер в namespace ingress-nginx
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.41.2/deploy/static/provider/cloud/deploy.yaml
