@@ -66,7 +66,7 @@ imagePullSecrets:
 
 kubectl -n test get sa default -o yaml
 
-##
+## Проверка
 kubectl -n test run alpine --image alpine -- ping 8.8.8.8
 kubectl -n test exec -it alpine -- sh
 apk add curl
