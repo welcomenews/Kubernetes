@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1 
+kind: Ingress
+metadata:
+  name: prometheus-ingress
+  namespace: default
+  annotations:
+    # Указываем, каким образом выписывать сертификат
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  rules:
+  - host: ingress.9a25c.task24.rbr-kubernetes.com  ## Меняем на нужный домен !!!!
+    http:
+      paths:
+      - backend:
+          service:
+            name: svc-internal  ##  ПОМЕНЯТЬ !!!!!
+            port:
+               number: 80    ##  ПОМЕНЯТЬ !!!!!
+        path: /
+        pathType: Prefix
+  # Указываем настройки для tls — для какого хоста нужен tls и куда сохранить полученный сертификат
+  tls:
+  - hosts:
+    - ingress.9a25c.task24.rbr-kubernetes.com
+    secretName: back-dev-kis-im-cert    ## Меняем на нужный домен !!!!
