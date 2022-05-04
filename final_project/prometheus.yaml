@@ -13,9 +13,9 @@ spec:
       paths:
       - backend:
           service:
-            name: svc-internal  ##  ПОМЕНЯТЬ !!!!!
+            name: svc-internal  ##  ПОМЕНЯТЬ на имя сервиса Prometheus !!!!!
             port:
-               number: 80    ##  ПОМЕНЯТЬ !!!!!
+               number: 9090
         path: /
         pathType: Prefix
   # Указываем настройки для tls — для какого хоста нужен tls и куда сохранить полученный сертификат
