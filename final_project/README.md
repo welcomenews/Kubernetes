@@ -34,7 +34,31 @@ kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.1
 ## необходимо создать новый clusterIssuer, который будет выписывать сертификаты через letsencrypt
 kubectl apply -f ./sert_manager_nginx.yaml
 
+3.
+## install helm
+curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
+sudo apt-get install apt-transport-https --yes
+echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt-get update
+sudo apt-get install helm
+
+## установка kube-prometheus-stack в кластер
+kubectl create ns monitoring
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add stable https://charts.helm.sh/stable
+helm repo update
+helm  pull prometheus-community/kube-prometheus-stack
+tar zxf kube-prometheus-stack-34.9.0.tgz
+rm kube-prometheus-stack-34.9.0.tgz
+cp kube-prometheus-stack/values.yaml values.dev.yaml
+## Включаем grafana, alertmanager, prometheus
+vim values.dev.yaml
+## install chart
+helm -n monitoring upgrade --install prometheus-stack -f values.dev.yaml ./kube-prometheus-stack/
+
+kubectl get ing -n monitoring
 
 kubectl apply -f ./prometheus.yaml
+kubectl apply -f ./podmonitor.yaml
 
 ```
