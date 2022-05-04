@@ -1,9 +1,25 @@
 ## KUB 35: Настройка CI/CD в Gitlab для Kubernetes
 
-
+1. Создайте репозиторий в группе https://gitlab.rebrainme.com/kubernetes_users_repos/<your_gitlab_id>/
+2. Склонируйте код приложения расположенный в репозитории и сохраните его в созданный репозиторий в п.1
+3. Настройте gitlab-ci в созданном репозитории:
+4. необходимо собирать образ контейнера и размещать его в Gitlab Registry.
+5. приложение из собранного контейнера необходимо деплоить в Kubernetes кластер.
+6. Деплой должен происходить с использованием сервисного аккаунта.
+7. Деплой так же должен происходить с использованием helm.
+8. Используйте helm-secrets для шифрования секретов
+9. Приложение должно:
+10. деплоится в namespace test
+11. деплоймент должен называться application
+12. сервис для доступа к приложению должен называться app-svc
+13. образ контейнера для приложения должен запрашиваться с registry.rebrainme.com
+14. После выполнения задания при формировании ответа добавьте вывод команд kubectl, который сможет подтвердить создание всех необходимых по заданию объектов kubernetes в назначенном по заданию namespace.
 
 
 ```
+## репа 
+https://gitlab.rebrainme.com/kubernetes_users_repos/1332/kub-35.git
+
 ## Установка sops
 wget https://github.com/mozilla/sops/releases/download/v3.7.1/sops-v3.7.1.linux
 mv sops-v3.7.1.linux /usr/local/bin/sops
@@ -57,3 +73,11 @@ apk add curl
 curl -D - app-svc
 
 ```
+
+https://github.com/traefik/whoami
+
+https://docs.gitlab.com/ee/ci/variables/predefined_variables.html
+
+https://helm.sh/ru/docs/intro/using_helm/
+
+
