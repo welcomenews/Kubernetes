@@ -16,10 +16,19 @@
 7. в директории internal разместить все манифесты (или чарты), которые вы использовали для запуска mysql базы и nfs provisioner'а
 
 ```
+1.
 ## Секрет для mysql
 kubectl apply -f mysql-secret.yaml
 
 kubectl apply -f mysql-deployment.yaml
+
+2.
+## Установка nginx-ingress контроллера
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.41.2/deploy/static/provider/cloud/deploy.yaml
+
+3.
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.1.0/cert-manager.yaml
+kubectl apply -f ./sert_manager_nginx.yaml
 
 
 ```
