@@ -58,6 +58,7 @@ helm -n monitoring upgrade --install prometheus-stack -f values.dev.yaml ./kube-
 
 kubectl get ing -n monitoring
 
+## Получение сертификата.
 kubectl apply -f ./prometheus.yaml
 ## kubectl apply -f ./podmonitor.yaml  ## Проверит нужен ли он (32) !!!
 
