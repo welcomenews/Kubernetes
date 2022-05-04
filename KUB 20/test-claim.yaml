@@ -1,7 +1,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: test-claim
+  name: nfs-data
   namespace: default
 spec:
   storageClassName: nfs-client
