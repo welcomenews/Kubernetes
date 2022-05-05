@@ -80,11 +80,13 @@ helm repo update
 helm  pull prometheus-community/kube-prometheus-stack
 tar zxf kube-prometheus-stack-34.9.0.tgz
 rm kube-prometheus-stack-34.9.0.tgz
-cp kube-prometheus-stack/values.yaml values.dev.yaml
+cd kube-prometheus-stack
+cp values.yaml values.dev.yaml
 ## Включаем grafana, alertmanager, prometheus
 vim values.dev.yaml
+## В prometheus домен ставлю - prometheus.final.rbr-kubernetes.com
 ## install chart
-helm -n monitoring upgrade --install prometheus-stack -f values.dev.yaml ./kube-prometheus-stack/
+helm -n monitoring upgrade --install prometheus-stack -f values.dev.yaml ./
 
 kubectl get ing -n monitoring
 
@@ -94,7 +96,8 @@ curl -X POST "https://api.cloudflare.com/client/v4/zones/9152ec3c08b1a4faeaa9535
 
 ## Получение сертификата.
 kubectl apply -f ./prometheus.yaml
-## kubectl apply -f ./podmonitor.yaml  ## Проверит нужен ли он (32) !!!
+
+## kubectl apply -f ./podmonitor.yaml  ## Проверит нужен ли он (32) !!! Вроде бы не надо.
 
 ?????????????????????????????
 
