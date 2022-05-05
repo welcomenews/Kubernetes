@@ -57,6 +57,7 @@ helm -n monitoring upgrade --install prometheus-stack -f values.dev.yaml ./kube-
 
 kubectl get ing -n monitoring
 
+##  На что DNS ставить ???
 ## Делаем DNS запись
 curl -X POST "https://api.cloudflare.com/client/v4/zones/9152ec3c08b1a4faeaa95353a929fcc5/dns_records" -H "Authorization: Bearer dfg..." -H "Content-Type:application/json" --data '{"type":"A","name":"ingress.d6315.task22.rbr-kubernetes.com","content":"157.245.18.47","proxied":false}'
 
@@ -69,6 +70,7 @@ kubectl apply -f ./prometheus.yaml
 4.
 kubectl create namespace logging
 
+##  На что DNS ставить ???
 ## Добавляем DNS запись
 curl -X POST "https://api.cloudflare.com/client/v4/zones/915..../dns_records" -H "Authorization: Bearer r6E...." -H "Content-Type:application/json" --data '{"type":"A","name":"ingress.06806.task34.rbr-kubernetes.com","content":"134.209.135.50","proxied":false}'
 
