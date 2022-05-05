@@ -16,6 +16,40 @@
 7. в директории internal разместить все манифесты (или чарты), которые вы использовали для запуска mysql базы и nfs provisioner'а
 
 ```
+## NFS server
+## на всех нодах 
+sudo apt-get update
+sudo apt-get install nfs-common
+
+## на ноде nfs
+sudo mkdir -p /opt/nfs/kubernetes/
+sudo chmod 777 /opt/nfs/kubernetes/
+
+## на ноде1
+git clone https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner
+или
+https://gitlab.rebrainme.com/kubernetes_users_repos/1332/kub-20.git
+
+sed -i'' "s/namespace:.*/namespace: provisioner/g" ./deploy/rbac.yaml ./deploy/deployment.yaml
+kubectl create ns provisioner
+
+kubectl apply -f deploy/rbac.yaml
+
+## редактируем IP от nfs
+vim deploy/deployment.yaml
+kubectl apply -f deploy/deployment.yaml
+
+## меняем имя
+vim deploy/class.yaml
+kubectl apply -f deploy/class.yaml
+
+## меняем имя, размер и наймспайс
+vim deploy/test-claim.yaml
+kubectl apply -f deploy/test-claim.yaml
+
+## меняем имя, папку для монтирования и наймспайс
+&&&????
+
 1.
 ## Секрет для mysql
 kubectl apply -f mysql-secret.yaml
