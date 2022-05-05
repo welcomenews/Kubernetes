@@ -85,6 +85,7 @@ cp values.yaml values.dev.yaml
 ## Включаем grafana, alertmanager, prometheus
 vim values.dev.yaml
 ## В prometheus домен ставлю - prometheus.final.rbr-kubernetes.com
+... добавляем аннотации basic authentication в ingress как в kub-34/values.kibana.yaml
 ## install chart
 helm -n monitoring upgrade --install prometheus-stack -f values.dev.yaml ./
 
@@ -92,7 +93,7 @@ kubectl get ing -n monitoring
 
 ##  На что DNS ставить ???
 ## Делаем DNS запись
-curl -X POST "https://api.cloudflare.com/client/v4/zones/9152ec3c08b1a4faeaa95353a929fcc5/dns_records" -H "Authorization: Bearer dfg..." -H "Content-Type:application/json" --data '{"type":"A","name":"ingress.d6315.task22.rbr-kubernetes.com","content":"157.245.18.47","proxied":false}'
+curl -X POST "https://api.cloudflare.com/client/v4/zones/9152ec3c08b1a4faeaa95353a929fcc5/dns_records" -H "Authorization: Bearer dfg..." -H "Content-Type:application/json" --data '{"type":"A","name":"prometheus.final.rbr-kubernetes.com","content":"157.245.18.47","proxied":false}'
 
 ## Получение сертификата.
 kubectl apply -f ./prometheus.yaml
