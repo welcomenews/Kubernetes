@@ -23,8 +23,9 @@ kubectl apply -f mysql-secret.yaml
 kubectl apply -f mysql-deployment.yaml
 
 2.
-## Установка nginx-ingress контроллера
+## Установите nginx-ingress контроллер в namespace ingress-nginx
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.41.2/deploy/static/provider/cloud/deploy.yaml
+kubectl -n ingress-nginx get svc
 
 ## Делаем DNS запись
 curl -X POST "https://api.cloudflare.com/client/v4/zones/9152ec3c08b1a4faeaa95353a929fcc5/dns_records" -H "Authorization: Bearer dfg..." -H "Content-Type:application/json" --data '{"type":"A","name":"ingress.d6315.task22.rbr-kubernetes.com","content":"157.245.18.47","proxied":false}'
@@ -61,5 +62,50 @@ kubectl get ing -n monitoring
 ## Получение сертификата.
 kubectl apply -f ./prometheus.yaml
 ## kubectl apply -f ./podmonitor.yaml  ## Проверит нужен ли он (32) !!!
+
+?????????????????????????????
+
+4.
+kubectl create namespace logging
+
+## Добавляем DNS запись
+curl -X POST "https://api.cloudflare.com/client/v4/zones/915..../dns_records" -H "Authorization: Bearer r6E...." -H "Content-Type:application/json" --data '{"type":"A","name":"ingress.06806.task34.rbr-kubernetes.com","content":"134.209.135.50","proxied":false}'
+
+## Install elastic
+helm repo add elastic https://helm.elastic.co
+helm pull elastic/elasticsearch
+tar zxf elasticsearch-7.17.3.tgz
+cp elasticsearch/values.yaml values.elastic.yaml
+vim values.elastic.yaml
+...
+helm -n logging upgrade --install elastic -f values.elastic.yaml ./elasticsearch
+ 
+## Install fluent-bit
+helm repo add fluent https://fluent.github.io/helm-charts
+helm pull fluent/fluent-bit
+tar zxf fluent-bit-0.19.23.tgz
+cp fluent-bit/values.yaml values.fb.yaml
+vim values.fb.yaml
+...
+helm -n logging upgrade --install fluent-bit -f values.fb.yaml ./fluent-bit
+ 
+## Настройте basic authentication
+htpasswd -c auth kibana
+...
+kubectl create secret generic basic-auth --from-file=auth
+
+## Install kibana
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm pull elastic/kibana
+tar zxf kibana-7.17.3.tgz
+cp kibana/values.yaml values.kibana.yaml
+vim values.kibana.yaml
+... добавляем аннотации basic authentication в ingress
+helm -n logging upgrade --install kibana -f values.kibana.yaml ./kibana
+
+kubectl get ing -A
+
+
+
 
 ```
