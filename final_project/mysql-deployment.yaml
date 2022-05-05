@@ -26,12 +26,12 @@ spec:
         - containerPort: 3306
           name: mysql
         volumeMounts:
-        - name: mysql-persistent-storage
+        - name: nfs-pvc
           mountPath: /var/lib/mysql
       volumes:
-      - name: mysql-persistent-storage
+      - name: nfs-pvc
         persistentVolumeClaim:
-          claimName: mysql-pv-claim
+          claimName: nfs-data
 ---
 apiVersion: v1
 kind: Service
