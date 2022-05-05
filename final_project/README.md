@@ -39,16 +39,13 @@ kubectl apply -f deploy/rbac.yaml
 vim deploy/deployment.yaml
 kubectl apply -f deploy/deployment.yaml
 
-## меняем имя
+## меняем имя если нужно
 vim deploy/class.yaml
 kubectl apply -f deploy/class.yaml
 
-## меняем имя, размер и наймспайс
+## меняем имя, размер и наймспайс если нужно
 vim deploy/test-claim.yaml
 kubectl apply -f deploy/test-claim.yaml
-
-## меняем имя, папку для монтирования и наймспайс
-&&&????
 
 1.
 ## Секрет для mysql
