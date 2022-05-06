@@ -124,6 +124,7 @@ helm pull fluent/fluent-bit
 tar zxf fluent-bit-0.19.23.tgz
 cp fluent-bit/values.yaml values.fb.yaml
 vim values.fb.yaml
+# отключаем testFramework:
 ...
 helm -n logging upgrade --install fluent-bit -f values.fb.yaml ./fluent-bit
  
