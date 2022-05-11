@@ -1,0 +1,28 @@
+#### Его создавать после сертификатов
+
+apiVersion: networking.k8s.io/v1  
+kind: Ingress
+metadata:  
+  name: nginx-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.org/ssl-services: "wordpress"
+  labels:
+    app: wordpress
+spec:  
+  rules:
+  - host: ingress.final.rbr-kubernetes.com
+    http:
+      paths:
+      - path: /
+        backend:
+          service:
+            name: wordpress
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - ingress.final.rbr-kubernetes.com
+    secretName: tls-certificate 
+    
+    
