@@ -23,7 +23,7 @@ spec:
         name: wordpress
         envFrom:
         - secretRef:
-          name: mysqlsecret
+            name: mysqlsecret
         ports:
         - containerPort: 80
           name: wordpress
