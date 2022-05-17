@@ -139,7 +139,8 @@ helm pull elastic/kibana
 tar zxf kibana-7.17.3.tgz
 cp kibana/values.yaml values.kibana.yaml
 vim values.kibana.yaml
-... добавляем аннотации basic authentication в ingress
+## В kibana домен ставлю - kibana.final.rbr-kubernetes.com
+... добавляем аннотации basic authentication в ingress как в kub-34/values.kibana.yaml
 helm -n logging upgrade --install kibana -f values.kibana.yaml ./kibana
 
 kubectl get ing -A
