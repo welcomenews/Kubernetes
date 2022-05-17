@@ -92,7 +92,6 @@ helm -n monitoring upgrade --install prometheus-stack -f values.dev.yaml ./
 
 kubectl get ing -n monitoring
 
-##  На что DNS ставить ???
 ## Делаем DNS запись
 curl -X POST "https://api.cloudflare.com/client/v4/zones/9152ec3c08b1a4faeaa95353a929fcc5/dns_records" -H "Authorization: Bearer dfg..." -H "Content-Type:application/json" --data '{"type":"A","name":"prometheus.final.rbr-kubernetes.com","content":"157.245.18.47","proxied":false}'
 
