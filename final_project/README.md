@@ -105,7 +105,6 @@ kubectl apply -f ./prometheus.yaml
 4.
 kubectl create namespace logging
 
-##  На что DNS ставить ???
 ## Добавляем DNS запись
 curl -X POST "https://api.cloudflare.com/client/v4/zones/915..../dns_records" -H "Authorization: Bearer r6E...." -H "Content-Type:application/json" --data '{"type":"A","name":"ingress.06806.task34.rbr-kubernetes.com","content":"134.209.135.50","proxied":false}'
 
@@ -115,6 +114,7 @@ helm pull elastic/elasticsearch
 tar zxf elasticsearch-7.17.3.tgz
 cp elasticsearch/values.yaml values.elastic.yaml
 vim values.elastic.yaml
+## меняем реплику и отключаем pvc
 ...
 helm -n logging upgrade --install elastic -f values.elastic.yaml ./elasticsearch
  
