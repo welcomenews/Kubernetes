@@ -177,6 +177,10 @@ gpg --armor --export-secret-key <key pgp>
 ## Создаём данные для аунтификации на gitlab (чтобы кубер мог скачать образ)
 kubectl -n dev create secret docker-registry gitlab-secret --docker-username=welcome-news_at_mail_ru --docker-password=glp... --docker-server=registry.rebrainme.com
 kubectl -n prod create secret docker-registry gitlab-secret --docker-username=welcome-news_at_mail_ru --docker-password=glp... --docker-server=registry.rebrainme.com
+или
+## Нужно!
+sudo chmod 666 /var/run/docker.sock
+docker login https://gitlab.rebrainme.com/kubernetes_users_repos/1332/final_project.git
 
 kubectl -n dev edit sa default
 ## добавляем
