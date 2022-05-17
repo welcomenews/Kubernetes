@@ -152,4 +152,6 @@ kubectl get ing -A
 
 8D4CB7DD9C90DF356FEE7C288287186E07AB7D5D
 
+"id":"921244ef4155e95bee398065fbe6a8f7"  prometheus.final.rbr-kubernetes.com
+
 
