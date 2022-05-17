@@ -145,7 +145,51 @@ helm -n logging upgrade --install kibana -f values.kibana.yaml ./kibana
 
 kubectl get ing -A
 
+5.
+## Установка sops
+wget https://github.com/mozilla/sops/releases/download/v3.7.1/sops-v3.7.1.linux
+mv sops-v3.7.1.linux /usr/local/bin/sops
+chmod +x /usr/local/bin/sops
+sops -v
 
+## сгенерируем приватный pgp ключ (указали только свое имя и email адрес)
+gpg --gen-key
+
+## clone repo
+https://gitlab.rebrainme.com/kubernetes_users_repos/1332/kub-35.git
+
+## Шифруем secrets.test.yaml
+sops -e --pgp 5D4BB6EAFF2191FFEFEAF9119A5 secret.yaml > secrets.dev.yaml
+sops -e --pgp 5D4BB6EAFF2191FFEFEAF9119A5 secret.yaml > secrets.prod.yaml
+sops -d secrets.dev.yaml
+
+kubectl create namespace dev
+kubectl create namespace prod
+
+## Создать переменную в settings -> CI/CD -> varibles KUBECONFIG и HELM_SECRET
+## Для получения KUBECONFIG
+cat .kube/config
+## Для получения HELM_SECRET
+gpg --armor --export-secret-key <key pgp>
+
+## Создать токен settings -> Access Tokens имя любое. 
+
+## Создаём данные для аунтификации на gitlab (чтобы кубер мог скачать образ)
+kubectl -n dev create secret docker-registry gitlab-secret --docker-username=welcome-news_at_mail_ru --docker-password=glp... --docker-server=registry.rebrainme.com
+kubectl -n prod create secret docker-registry gitlab-secret --docker-username=welcome-news_at_mail_ru --docker-password=glp... --docker-server=registry.rebrainme.com
+
+kubectl -n dev edit sa default
+## добавляем
+imagePullSecrets:
+- name: gitlab-secret
+
+kubectl -n prod edit sa default
+## добавляем
+imagePullSecrets:
+- name: gitlab-secret
+
+kubectl -n dev get sa default -o yaml
+kubectl -n prod get sa default -o yaml
 
 
 ```
