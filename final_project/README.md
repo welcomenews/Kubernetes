@@ -200,4 +200,4 @@ kubectl -n prod get sa default -o yaml
 
 "id":"f49e92c360a5488864feefc8fe2b8b8f"  kibana.final.rbr-kubernetes.com
 
-
+glpat-TUE1LaSx1_Y1VRVHyfhr
