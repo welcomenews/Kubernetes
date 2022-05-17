@@ -154,4 +154,6 @@ kubectl get ing -A
 
 "id":"921244ef4155e95bee398065fbe6a8f7"  prometheus.final.rbr-kubernetes.com
 
+"id":"f49e92c360a5488864feefc8fe2b8b8f"  kibana.final.rbr-kubernetes.com
+
 
