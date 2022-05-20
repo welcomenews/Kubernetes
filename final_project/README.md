@@ -156,7 +156,7 @@ sops -v
 gpg --gen-key
 
 ## clone repo
-https://gitlab.rebrainme.com/kubernetes_users_repos/1332/kub-35.git
+https://gitlab.rebrainme.com/kubernetes_users_repos/1332/final_project.git
 
 ## Шифруем secrets.test.yaml
 sops -e --pgp 5D4BB6EAFF2191FFEFEAF9119A5 secret.yaml > secrets.dev.yaml
@@ -195,6 +195,7 @@ imagePullSecrets:
 kubectl -n dev get sa default -o yaml
 kubectl -n prod get sa default -o yaml
 
+git push 
 
 ```
 
