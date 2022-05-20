@@ -22,9 +22,8 @@ sudo apt-get update
 sudo apt-get install nfs-common
 
 ## на ноде nfs
-sudo mkdir -p /opt/nfs/kubernetes/uploads/
-sudo chmod 777 /opt/nfs/kubernetes/
-sudo chmod 777 /opt/nfs/kubernetes/uploads/
+sudo mkdir -p /opt/nfs/uploads/
+sudo chmod 777 /opt/nfs/uploads/
 
 ## на ноде1
 git clone https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner
