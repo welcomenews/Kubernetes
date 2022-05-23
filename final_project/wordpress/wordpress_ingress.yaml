@@ -11,7 +11,7 @@ metadata:
     app: wordpress
 spec:  
   rules:
-  - host: ingress.final.rbr-kubernetes.com
+  - host: ingress.word.rbr-kubernetes.com
     http:
       paths:
       - path: /
@@ -22,7 +22,7 @@ spec:
               number: 80
   tls:
   - hosts:
-    - ingress.final.rbr-kubernetes.com
+    - ingress.word.rbr-kubernetes.com
     secretName: tls-certificate 
     
     
