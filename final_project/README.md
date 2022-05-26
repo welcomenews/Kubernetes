@@ -99,7 +99,6 @@ kubectl apply -f ./prometheus.yaml
 
 ## kubectl apply -f ./podmonitor.yaml  ## Проверит нужен ли он (32) !!! Вроде бы не надо.
 
-?????????????????????????????
 
 4.
 kubectl create namespace logging
@@ -198,12 +197,18 @@ git push
 
 ```
 
-8D4CB7DD9C90DF356FEE7C288287186E07AB7D5D
 
-"id":"921244ef4155e95bee398065fbe6a8f7"  prometheus.final.rbr-kubernetes.com
+"id":"b9069acea460694ebcd3f860ea053f65"  prometheus.final.rbr-kubernetes.com
 
-"id":"f49e92c360a5488864feefc8fe2b8b8f"  kibana.final.rbr-kubernetes.com
+"id":"37dd12d8771d74f65a0f331628c4d34b"  kibana.final.rbr-kubernetes.com
 
-"id":"03a83cd2e483ef3e530569aed169fbc6"  ingress.final.rbr-kubernetes.com
+
+"id":"251146da8c93da8718b4d5f3795b2d9f"  prometheus.final-isa.rbr-kubernetes.com
+
+"id":"e80d4243b03334a5a446b82a3c2ce2b1"  grafana.final.rbr-kubernetes.com
+
+"id":"137a0df1d0e04a06026e792035f64002"  kibana.final-isa.rbr-kubernetes.com
+
+7321DDA7E1D9AEC957AEF75CAB3952234EDA31D9
 
 glpat-TUE1LaSx1_Y1VRVHyfhr
