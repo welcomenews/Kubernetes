@@ -25,6 +25,7 @@ kubectl get rs --namespace=kube-system     Смотреть количество
 kubectl get services --sort-by=.metadata.name  Список служб, отсортированных по имени
 kubectl get pods --sort-by='.status.containerStatuses[0].restartCount'  Список модулей, отсортированных по количеству перезапусков
 kubectl get pv --sort-by=.spec.capacity.storage  Список PersistentVolumes, отсортированных по емкости
+kubectl get pods -o=custom-columns=NAME:.metadata.name,DATA:metadata.ownerReferences   Увидить каким репликасет был создан под
 
 kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="ExternalIP")].address}'  Получить внешние IP всех узлов
 
@@ -67,6 +68,7 @@ kubectl scale --replicas=3 rs/foo                         Масштабиров
 kubectl scale --replicas=3 -f foo.yaml                   Масштабируйте ресурс, указанный в «foo.yaml», до 3
 kubectl scale --current-replicas=2 --replicas=3 deployment/mysql   Если текущий размер развертывания с именем mysql равен 2, масштабируйте mysql до 3
 kubectl scale --replicas=5 rc/foo rc/bar rc/baz        Масштабирование нескольких контроллеров репликации
+kubectl scale replicaset nginx --replicas=3            Увеличить ReplicaSet nginx до 3 штук. (увеличивается колл-во машин)
 
 kubectl edit svc/docker-registry                        Отредактируйте службу с именем docker-registry.
 KUBE_EDITOR="nano" kubectl edit svc/docker-registry     Используйте альтернативный редактор
