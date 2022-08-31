@@ -59,6 +59,8 @@ kubectl rollout undo deployment/frontend --to-revision=2   Откат к опр�
 kubectl rollout status -w deployment/frontend  Наблюдайте за статусом непрерывного обновления развертывания из «frontend» до его завершения.
 kubectl rollout restart deployment/frontend    Последовательный перезапуск развертывания из «frontend»
 
+kubectl image load nginx:v1.1                 Загрузить в режестри kubernates имедж nginx:v1.1
+
 kubectl label pods my-pod new-label=awesome                 Добавить метку
 kubectl label nodes --all usercase=workload                 Добавить метку всем нодам
 kubectl label node <nodename> <labelname>-                  Удалить метку у ноды
@@ -72,7 +74,6 @@ kubectl scale replicaset nginx --replicas=3            Увеличить объ
 
 kubectl edit svc/docker-registry                        Отредактируйте службу с именем docker-registry.
 KUBE_EDITOR="nano" kubectl edit svc/docker-registry     Используйте альтернативный редактор
-
 
 kubectl cordon <имя_пода>                    пометим наш узел как неназначаемый, чтобы на нем не могли запускаться поды
 kubectl drain <имя_пода> --ignore-daemonsets  заставить Kubernetes переместить текущие поды с этой ноды
