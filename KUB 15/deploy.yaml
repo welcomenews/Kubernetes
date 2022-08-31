@@ -36,7 +36,7 @@ spec:
               cpu: "250m"
       - name: redis
         image: redis
-		resources:
+        resources:
             requests:
               memory: "64Mi"
               cpu: "250m"
