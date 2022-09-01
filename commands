@@ -8,11 +8,12 @@ kubectl cluster-info dump --output-directory=/path/to/cluster-state   Запис
 
 kubectl apply -f <имя файла.yml>             применить конфиг описаный в файле
 kubectl run -it --image ubuntu bash          запустить ubuntu и зайти в bash
-kubectl -n <найм_спэйс> delete po <имя_пода>   удаление пот с определённым именем.
-kubectl -n <найм_спэйс> get event -w         смотреть что происходит с подами
-kubectl -n <найм_спэйс> get pods             смотреть все поды в этом наймспэйсе
-kubectl -n <найм_спэйс> get pods -o wide     расширенный просмотр всех подов в этом наймспэйсе
-kubectl -n <найм_спэйс> get svc              смотреть какие есть сервисы.
+kubectl -n <найм_спэйс> delete po <имя_пода>                       удаление пот с определённым именем.
+kubectl -n <найм_спэйс> get event -w                               смотреть что происходит с подами
+kubectl get event --field-selector involvedObject.name='my-nginx'  Смотреть что происходит с конкретным подом с именем my-nginx
+kubectl -n <найм_спэйс> get pods                                   смотреть все поды в этом наймспэйсе
+kubectl -n <найм_спэйс> get pods -o wide                           расширенный просмотр всех подов в этом наймспэйсе
+kubectl -n <найм_спэйс> get svc                                    смотреть какие есть сервисы.
 kubectl -n <найм_спэйс> get all               смотреть все ресурсы в данном наймсп
 kubectl get all --all-namespaces              смотреть все ресурсы из всех наймспэйсов
 kubectl get ds --all-namespaces               смотреть даймон сеты из всех наймспэйсов
