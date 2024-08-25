@@ -22,6 +22,8 @@ kubectl plugin list                           просмотреть все пл
 sudo kubectl get configmap                    ???
 kubectl get rs --namespace=kube-system        Смотреть количество реплик
 
+kubectl edit <имя пода>                       редактировать работающий под
+
 
 kubectl get services --sort-by=.metadata.name                                         Список служб, отсортированных по имени
 kubectl get pods --sort-by='.status.containerStatuses[0].restartCount'                Список модулей, отсортированных по количеству перезапусков
@@ -65,6 +67,7 @@ kubectl image load nginx:v1.1                              Загрузить в
 kubectl image list                                         Смотреть загруженые обрвзы в kubernates
 
 kubectl label pods my-pod new-label=awesome                        Добавить метку
+kubectl label pods my-pod new-label=other --overwrite              Заменить существующую метку new-label=awesome на новую new-label=other
 kubectl label nodes --all usercase=workload                        Добавить метку всем нодам
 kubectl label node <nodename> <labelname>-                         Удалить метку у ноды
 kubectl annotate pods my-pod icon-url=http://goo.gl/XXBTWq         Добавить аннотацию
