@@ -61,6 +61,7 @@ kubectl rollout status -w deployment/frontend  Наблюдайте за ста�
 kubectl rollout restart deployment/frontend    Последовательный перезапуск развертывания из «frontend»
 
 kubectl image load nginx:v1.1                 Загрузить в режестри kubernates имедж nginx:v1.1
+kubectl image list                            Смотреть загруженые обрвзы в kubernates
 
 kubectl label pods my-pod new-label=awesome                 Добавить метку
 kubectl label nodes --all usercase=workload                 Добавить метку всем нодам
