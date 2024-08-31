@@ -29,6 +29,7 @@ kubectl edit <имя пода>                                            ред
 kubectl describe service {endpoints, pods, ..} <имя сервиса>       смотреть инфу по созданносу сервису, эндпоинту, поду, и т.д.
 kubectl get endpoints                                              смотреть список эндпоинтов
 kubectl get clusterroles                                           смотреть все кластерные роли
+kubectl auth can-i get pods -n default                             Узнать может ли текущий пользователь смотреть поды в неймспейсе default
 kubectl auth can-i get pods -n default --as user1                  Узнать может ли user1 смотреть поды в неймспейсе default
 kubectl auth can-i get secrets -n default --as user1               Узнать может ли user1 смотреть секреты в неймспейсе default
 kubectl auth can-i get  "*" "*" --as user1                         Проверяем все разрешения, везде.
