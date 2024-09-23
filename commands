@@ -97,8 +97,11 @@ kubectl uncordon <имя_пода>                         вернуть нод
 kubectl get podmetrics                              просмотреть metrics-server, который собирает базовые метрики — cpu & memory
 kubectl get nodemetrics                             --//--
 kubectl get podmetrics <имя_пода> -o yaml           смотреть метрики конкретного пода (загрузка cpu, mem)
+Смотреть API Metrics (чтобы они отображались, их нужно включить)
 kubectl top pods --all-namespaces            
 kubectl top nodes
+kubectl get vpa server-vpa                           Смотреть на рекомендации vpa
+kubectl get vpa server-vpa -o json -w | jq '.status.recommendation'   Вывести рекомендации в формате json 
 
 kubectl delete pods,services -l name=myLabel         Удалить поды и сервисы с меткой name=myLabel
 kubectl -n my-ns delete pod,svc --all                Удалить все поды и сервисы в пространстве имен my-ns
@@ -109,9 +112,6 @@ kubectl cp /tmp/foo my-pod:/tmp/bar -c my-container  Скопируйте лок
 kubectl cp /tmp/foo my-namespace/my-pod:/tmp/bar     Скопируйте локальный файл /tmp/foo в /tmp/bar в удаленный под в пространстве имен my-namespace
 kubectl cp my-namespace/my-pod:/tmp/foo /tmp/bar     Скопируйте /tmp/foo из удаленного пода в /tmp/bar на локальный клмпьютер
 
-Смотреть API Metrics (чтобы они отображались, их нужно включить)
-kubectl top nodes
-kubectl top pods
 
 смотреть список включеных адонов
 minikube addons list
