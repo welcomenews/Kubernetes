@@ -109,6 +109,13 @@ kubectl cp /tmp/foo my-pod:/tmp/bar -c my-container  Скопируйте лок
 kubectl cp /tmp/foo my-namespace/my-pod:/tmp/bar     Скопируйте локальный файл /tmp/foo в /tmp/bar в удаленный под в пространстве имен my-namespace
 kubectl cp my-namespace/my-pod:/tmp/foo /tmp/bar     Скопируйте /tmp/foo из удаленного пода в /tmp/bar на локальный клмпьютер
 
+Смотреть API Metrics (чтобы они отображались, их нужно включить)
+kubectl top nodes
+kubectl top pods
+
+смотреть список включеных адонов
+minikube addons list
+
 
 
 curl -D - -s https://164.92.204.143:6443/api/v1/nodes
