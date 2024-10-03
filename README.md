@@ -5,6 +5,16 @@
 curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl && chmod +x kubectl && mv kubectl /usr/local/bin
 ```
 
+You can also alias kubectl for easier usage.
+
+alias kubectl="minikube kubectl --"
+
+Alternatively, you can create a symbolic link to minikube’s binary named ‘kubectl’.
+
+ln -s $(which minikube) /usr/local/bin/kubectl
+
+-----------------------------------------------------------------------------
+
 
 ### Install docker (require)
 ```
