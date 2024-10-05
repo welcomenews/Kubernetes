@@ -39,7 +39,8 @@ kubectl get pods --sort-by='.status.containerStatuses[0].restartCount'          
 kubectl get pv --sort-by=.spec.capacity.storage                                       Список PersistentVolumes, отсортированных по емкости
 kubectl get pods -o=custom-columns=NAME:.metadata.name,DATA:metadata.ownerReferences  Увидить каким репликасет был создан под
 
-kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="ExternalIP")].address}'  Получить внешние IP всех узлов
+kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="ExternalIP")].address}'                      Получить внешние IP всех узлов
+kubectl get pods -n <найм_спэйс> -o=jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.qosClass}{"\n"}{end}'    Проверить, какой QoS класс получил под
 
 kubectl logs -f app -c server                      смотреть логи в реальном времени в поде с именем app в контейнере с именем server
 
