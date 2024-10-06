@@ -118,6 +118,12 @@ kubectl cp my-namespace/my-pod:/tmp/foo /tmp/bar     Скопируйте /tmp/f
 смотреть список включеных адонов
 minikube addons list
 
+===============================
+Задать в переменную имя пода prometheus и потом запустить порт форвардинг
+export POD_NAME=$(kubectl get pods --namespace monitoring -l "app.kubernetes.io/name=prometheus,app.kubernetes.io/instance=prometheus" -o jsonpath="{.items[0].metadata.name}")
+kubectl --namespace monitoring port-forward $POD_NAME 9090
+===============================
+
 
 
 curl -D - -s https://164.92.204.143:6443/api/v1/nodes
