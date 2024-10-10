@@ -126,7 +126,7 @@ kubectl --namespace monitoring port-forward $POD_NAME 9090
 Запустить задачу в цикле (пример)
 kubectl run netshoot --rm -ti --image=nicolaka/netshoot -- bash -c "while true;do curl  http://time-server-t2:8080 ;sleep 2;done"
 ================================
-Показать значение по ключу Endpoints для службы time-server-t2
+Показать значение по ключу Endpoints для сервиса time-server-t2
 while true; do kubectl describe svc time-server-t2  | grep Endpoints;sleep 2;done
 ================================
 
