@@ -123,7 +123,12 @@ minikube addons list
 export POD_NAME=$(kubectl get pods --namespace monitoring -l "app.kubernetes.io/name=prometheus,app.kubernetes.io/instance=prometheus" -o jsonpath="{.items[0].metadata.name}")
 kubectl --namespace monitoring port-forward $POD_NAME 9090
 ===============================
-
+Запустить задачу в цикле (пример)
+kubectl run netshoot --rm -ti --image=nicolaka/netshoot -- bash -c "while true;do curl  http://time-server-t2:8080 ;sleep 2;done"
+================================
+Показать значение по ключу Endpoints
+while true; do kubectl describe svc time-server-t2  | grep Endpoints;sleep 2;done
+================================
 
 
 curl -D - -s https://164.92.204.143:6443/api/v1/nodes
