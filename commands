@@ -80,6 +80,7 @@ kubectl label pods my-pod new-label=awesome                        Добави�
 kubectl label pods my-pod new-label=other --overwrite              Заменить существующую метку new-label=awesome на новую new-label=other
 kubectl label nodes --all usercase=workload                        Добавить метку всем нодам
 kubectl label node <nodename> <labelname>-                         Удалить метку у ноды
+kubectl label nodes kuber-vm-2 node-role.kubernetes.io/master=     Добавить лэйбл master ноде kuber-vm-2
 kubectl annotate pods my-pod icon-url=http://goo.gl/XXBTWq         Добавить аннотацию
 kubectl autoscale deployment foo --min=2 --max=10                  Автоматическое масштабирование развертывания "foo"
 kubectl scale --replicas=3 rs/foo                                  Масштабирование набора реплик с именем «foo» до 3
