@@ -96,6 +96,13 @@ kubectl cordon <имя_пода>                           пометим наш
 kubectl drain <имя_пода> --ignore-daemonsets        заставить Kubernetes переместить текущие поды с этой ноды
 kubectl uncordon <имя_пода>                         вернуть ноду в рабочее состояние
 
+kubectl taint nodes --all node-role.kubernetes.io/control-plane-                    Разрешить запуск подов на control plane. НЕ ЗАПУСКАТЬ НА МАСТЕРАХ
+kubectl taint nodes kuber-vm-2 node-role.kubernetes.io/control-plane:NoSchedule     Запретить запуск подов на control plane на ноде kuber-vm-2. без соответствующего разрешения toleration
+- NoExecute -        pod будет немедленно вымещен с узла без соответствующего toleration
+- NoSchedule -       pod не будет размещен без соответствующего разрешения toleration
+- PreferNoSchedule - мягкая версия NoSchedule, контроллер будет пытаться не разместить на узле с ограничениями pod'ы без разрешений, но если ресурсов не осталось, то разместит.
+kubectl get nodes -o custom-columns=NAME:.metadata.name,ARCH:.status.nodeInfo.architecture,KERNEL:.status.nodeInfo.kernelVersion,TAINTS:.spec.taints      Проверка taint
+
 kubectl get podmetrics                              просмотреть metrics-server, который собирает базовые метрики — cpu & memory
 kubectl get nodemetrics                             --//--
 kubectl get podmetrics <имя_пода> -o yaml           смотреть метрики конкретного пода (загрузка cpu, mem)
