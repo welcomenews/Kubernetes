@@ -1,0 +1,393 @@
+1. =======================>
+cat > /etc/hosts <<EOF
+# Your system has configured 'manage_etc_hosts' as True.
+# As a result, if you wish for changes to this file to persist
+# then you will need to either
+# a.) make changes to the master file in /etc/cloud/templates/hosts.debian.tmpl
+# b.) change or remove the value of 'manage_etc_hosts' in
+#     /etc/cloud/cloud.cfg or cloud-config from user-data
+
+127.0.1.1 kuber-vm-1.ru-central1.internal kuber-vm-1
+127.0.0.1 localhost
+
+# The following lines are desirable for IPv6 capable hosts
+
+::1 ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+
+# Cluster nodes
+10.129.0.34 kuber-vm-1
+10.129.0.16 kuber-vm-2
+10.129.0.4 kuber-vm-3
+EOF
+
+
+2. ========================>
+#### На всех узлах выполним команду:
+
+sudo apt update
+sudo apt install -y curl wget gnupg iptables keepalived haproxy
+
+3.
+#### На всех узлах выполним команду:
+
+cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+
+sudo /sbin/modprobe overlay
+sudo /sbin/modprobe br_netfilter
+
+sudo vim /etc/sysctl.d/10-k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.ipv4.ip_forward = 1
+
+sudo sysctl --system
+
+sudo swapoff -a
+sudo sed -i '/ swap / s/^/#/' /etc/fstab
+
+
+
+Проверка
+lsmod | grep br_netfilter
+lsmod | grep overlay
+
+## Ожидаемый результат должен быть следующим (цифры могут отличаться):
+# br_netfilter           32768  0
+# bridge                258048  1 br_netfilter
+# overlay               147456  0
+
+sudo swapon -s
+
+## Ожидаемый вывод команды – пустой. Она ничего не должна отобразить.
+
+4.
+#### Установка kubelet kubeadm и kubectl
+#### На всех узлах выполним команду:
+
+sudo apt-get update
+sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+sudo mkdir -p -m 755 /etc/apt/keyrings
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+sudo systemctl enable --now kubelet
+
+5.
+#### Установка containerd
+#### На всех узлах выполним команду:
+
+wget https://github.com/containerd/containerd/releases/download/v1.7.22/containerd-1.7.22-linux-amd64.tar.gz
+tar Cxzvf /usr/local containerd-1.7.22-linux-amd64.tar.gz
+rm containerd-1.7.22-linux-amd64.tar.gz
+
+# Создание конфигурации по умолчанию для containerd
+mkdir /etc/containerd/
+containerd config default > /etc/containerd/config.toml
+
+# Настройка cgroup драйвера
+sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
+
+# Установка systemd сервиса для containerd
+wget https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
+mv containerd.service /etc/systemd/system/
+
+# Установка компонента runc
+wget https://github.com/opencontainers/runc/releases/download/v1.1.15/runc.amd64
+install -m 755 runc.amd64 /usr/local/sbin/runc
+rm runc.amd64
+
+# Установка сетевых плагинов:
+wget https://github.com/containernetworking/plugins/releases/download/v1.5.1/cni-plugins-linux-amd64-v1.5.1.tgz
+mkdir -p /opt/cni/bin
+tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.5.1.tgz
+rm cni-plugins-linux-amd64-v1.5.1.tgz
+
+# Запуск сервиса containerd
+systemctl daemon-reload
+systemctl enable --now containerd
+
+
+6.
+====> Настройка демона keepalived
+
+Создаём файл /etc/keepalived/keepalived.conf
+
+global_defs {
+    enable_script_security
+    script_user nobody
+}
+
+vrrp_script check_apiserver {
+  script "/etc/keepalived/check_apiserver.sh"
+  interval 3
+}
+
+vrrp_instance VI_1 {
+    state BACKUP
+    interface eth0
+    virtual_router_id 5
+    priority 100
+    advert_int 1
+    nopreempt
+    authentication {
+        auth_type PASS
+        auth_pass ZqSj#f1G
+    }
+
+    virtual_ipaddress {
+        10.129.0.10
+    }
+    track_script {
+        check_apiserver
+    }
+}
+
+
+Создаём файл /etc/keepalived/check_apiserver.sh
+
+#!/bin/sh
+# File: /etc/keepalived/check_apiserver.sh
+
+APISERVER_VIP=10.129.0.10
+APISERVER_DEST_PORT=8888
+PROTO=http
+
+errorExit() {
+    echo "*** $*" 1>&2
+    exit 1
+}
+
+curl --silent --max-time 2 --insecure ${PROTO}://localhost:${APISERVER_DEST_PORT}/ -o /dev/null || errorExit "Error GET ${PROTO}://localhost:${APISERVER_DEST_PORT}/"
+if ip addr | grep -q ${APISERVER_VIP}; then
+    curl --silent --max-time 2 --insecure ${PROTO}://${APISERVER_VIP}:${APISERVER_DEST_PORT}/ -o /dev/null || errorExit "Error GET ${PROTO}://${APISERVER_VIP}:${APISERVER_DEST_PORT}/"
+fi
+
+
+chmod +x /etc/keepalived/check_apiserver.sh
+systemctl enable keepalived
+systemctl start keepalived
+
+<========
+
+
+======> Настройка демона haproxy
+
+Создаём файл  /etc/haproxy/haproxy.cfg
+
+# Global settings
+#---------------------------------------------------------------------
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    daemon
+
+
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 1
+    timeout http-request    10s
+    timeout queue           20s
+    timeout connect         5s
+    timeout client          20s
+    timeout server          20s
+    timeout http-keep-alive 10s
+    timeout check           10s
+
+#---------------------------------------------------------------------
+# apiserver frontend which proxys to the control plane nodes
+#---------------------------------------------------------------------
+frontend apiserver
+    bind *:8888
+    mode tcp
+    option tcplog
+    default_backend apiserver
+
+#---------------------------------------------------------------------
+# round robin balancing for apiserver
+#---------------------------------------------------------------------
+backend apiserver
+    option httpchk GET /healthz
+    http-check expect status 200
+    mode tcp
+    option ssl-hello-chk
+    balance     roundrobin
+        server kuber-vm-1 10.129.0.34:6443 check
+        server kuber-vm-2 10.129.0.16:6443 check
+        server kuber-vm-3 10.129.0.4:6443 check
+
+
+systemctl enable haproxy
+systemctl restart haproxy
+
+### ПРИМЕЧАНИЕ. Демон будет ругаться, что не обнаружены backend сервера. Это нормально, так как Kubernetes API еще не запущен.
+
+<=======
+
+7.
+#### На kuber-vm-1 выполним команду:
+
+sudo kubeadm init --control-plane-endpoint 10.129.0.10:8888 --pod-network-cidr=10.244.0.0/16  --upload-certs | tee -a kubeadm.log
+
+#### установки сетевого плагина Calico
+#### На kuber-vm-1 выполним команду:
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml
+
+# Подтвердите, что все модули запущены, с помощью следующей команды.
+watch kubectl get pods -n kube-system
+
+# Разрешить запуск подов на control plane. НЕ ЗАПУСКАТЬ НА МАСТЕРАХ
+kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+
+# Запретить запуск подов на control plane на ноде kuber-vm-2. без соответствующего разрешения toleration
+kubectl taint nodes kuber-vm-2 node-role.kubernetes.io/control-plane:NoSchedule
+
+NoExecute - pod будет немедленно вымещен с узла без соответствующего toleration
+NoSchedule - pod не будет размещен без соответствующего разрешения toleration
+PreferNoSchedule - мягкая версия NoSchedule, контроллер будет пытаться не разместить на узле с ограничениями pod'ы без разрешений, но если ресурсов не осталось, то разместит.
+
+# Проверка taint 
+kubectl get nodes -o custom-columns=NAME:.metadata.name,ARCH:.status.nodeInfo.architecture,KERNEL:.status.nodeInfo.kernelVersion,TAINTS:.spec.taints
+
+# Добавить лэйбл master ноде kuber-vm-2
+kubectl label nodes kuber-vm-2 node-role.kubernetes.io/master=
+
+#### Проверка
+watch kubectl get pods -n calico-system
+
+8.
+kubectl get nodes
+
+
+
+
+
+======> Обновление kubernetes
+
+ГЛАВНОЕ: Между текущей и новой версией не должно быть больше одной минорной версии.
+Например: Правильно: текущая версия v1.30.2 а новая v1.31.5
+          Не правильно: текущая версия v1.29.2 а новая v1.31.5
+
+
+apt-cache madison kubeadm    Искать дновые доступные версии kubernetes
+после ищем changelog по этой версии. Там ищем блок Major Themes (основные изменения)
+
+1. Заходим на одну ноду master
+2. Сначала обновляем kubeadm до новой версии
+   а. Запустить kubeadm upgrade plan   - чтобы узнать может ли наш кластер быть обновлён, и на какие версии.
+   б. Запистить обновление kubeadm upgrade apply <версия_кластера>
+3. Обновить kubelet и kubectl.
+   а) Убираем нагрузку на ноду путем перемещения работающих подов на другую ноду.
+      kubectl drain <имя_ноды> --ignore-daemonsets
+   б) Обновляем kubelet и kubectl
+      apt-get install -y kubelet=<новая_версия> kubectl=<новая_версия>
+   в) systemctl daemon-reload && systemctl restart kubelet
+   г) Возвращаем в работу ноду обратно
+      kubectl uncordon <имя_ноды>
+4. kubectl version или kubectl version --client
+   kubectl get no
+5. Теперь обновляем на других нодах. 
+   а) apt-get install -y kubeadm=<новая_версия>
+   б) kubeadm upgrade node
+   в) kubectl drain <имя_ноды_2> --ignore-daemonsets
+   г) apt-get install -y kubelet=<новая_версия> kubectl=<новая_версия>
+   д) systemctl daemon-reload && systemctl restart kubelet
+   е) kubectl uncordon <имя_ноды_2>
+   ж) kubectl get no 
+6. Делаем как в пункту 5. на остальных master-нодах. А потом и на worker-нодах
+
+P.S. Если на каком то этапе обновления вылетели ошибки, то попробуйте запустить обновление ещё раз.
+
+<===================
+
+=========> Бэкап и восстановление kubernetes с помощью утилиты etcdctl
+
+1. cd /etc/kubernetes/manifests/
+   cat kube-apiserver.yaml
+
+Ищем строки примерно такие. Пути в строках могут быть другими. (Это из minikube)
+
+            - --etcd-cafile=/var/lib/minikube/certs/etcd/ca.crt
+            - --etcd-certfile=/var/lib/minikube/certs/apiserver-etcd-client.crt
+            - --etcd-keyfile=/var/lib/minikube/certs/apiserver-etcd-client.key
+            - --etcd-servers=https://127.0.0.1:2379
+
+2. Устанавливаем apt-get install etcd-client
+
+3. Смотреть список etcd node
+   sudo ETCDCTL_API=3 etcdctl --endpoints localhost:2379 \
+   --cert=/var/lib/minikube/certs/etcd/server.crt \
+   --key=/var/lib/minikube/certs/etcd/server.key \
+   --cacert=/var/lib/minikube/certs/etcd/ca.crt member list
+
+4. Создаём бэкап.
+   cd /var/lib/minikube/certs/etcd
+   mkdir backup && cd backup/
+   ETCDCTL_API=3 etcdctl --endpoints localhost:2379 \
+   --cert=/var/lib/minikube/certs/etcd/server.crt \
+   --key=/var/lib/minikube/certs/etcd/server.key \
+   --cacert=/var/lib/minikube/certs/etcd/ca.crt snapshot save etcdbackup
+
+5. Смотреть инфу о бэкапе.
+   ETCDCTL_API=3 etcdctl --endpoints localhost:2379 \
+   --cert=/var/lib/minikube/certs/etcd/server.crt \
+   --key=/var/lib/minikube/certs/etcd/server.key \
+   --cacert=/var/lib/minikube/certs/etcd/ca.crt snapshot status etcdbackup
+   или
+   ETCDCTL_API=3 etcdctl --endpoints localhost:2379 \
+   --cert=/var/lib/minikube/certs/etcd/server.crt \
+   --key=/var/lib/minikube/certs/etcd/server.key \
+   --cacert=/var/lib/minikube/certs/etcd/ca.crt snapshot status etcdbackup --write-out=table
+
+6. Восстановить бэкап
+   cd /var/lib/minikube/certs/etcd/backup/
+
+   ETCDCTL_API=3 etcdctl --endpoints localhost:2379 \
+   --cert=/var/lib/minikube/certs/etcd/server.crt \
+   --key=/var/lib/minikube/certs/etcd/server.key \
+   --cacert=/var/lib/minikube/certs/etcd/ca.crt snapshot restore etcdbackup
+
+   После команы создастся директория default.etcd/member/
+   Для восстановления нужно либо:
+   а) Заменить из default.etcd/member/ всё в директорию /var/lib/minikube/etcd/member/  (Это текущий кластер)
+   б) Либо заменить путь в файле /etc/kubernetes/manifests/etcd.yaml
+      - --data-dir=/var/lib/minikube/etcd
+      на правильный с бэкапом с дирой member/.
+
+7. Пункт 6. нужно делать на всех нодах.
+
+<================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
