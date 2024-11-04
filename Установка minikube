@@ -1,0 +1,24 @@
+# Preinstall
+sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+
+# Установка docker
+https://docs.docker.com/engine/install/
+
+# Установка minikube
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+
+# Даём права.
+$ sudo usermod -aG docker $USER
+$ newgrp docker
+
+# Варианты запуска
+minikube start --driver=docker
+
+# To make docker the default driver
+minikube config set driver docker
+
