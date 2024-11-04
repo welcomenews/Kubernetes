@@ -1,3 +1,6 @@
+
+## Установка KUBEADM
+
 1. =======================>
 cat > /etc/hosts <<EOF
 # Your system has configured 'manage_etc_hosts' as True.
