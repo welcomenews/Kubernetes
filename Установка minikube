@@ -28,6 +28,7 @@ alias kubectl="minikube kubectl --"
 # Alternatively, you can create a symbolic link to minikube’s binary named ‘kubectl’.
 ln -s $(which minikube) /usr/local/bin/kubectl
 
+=====================================
 Использование minikube tunnel
 Службы типа LoadBalancer могут быть открыты с помощью команды minikube tunnel . Для поддержания работы LoadBalancer её необходимо запускать в отдельном окне терминала. 
 Для завершения процесса в терминале можно использовать сочетание клавиш Ctrl-C, после чего сетевые маршруты будут очищены.
@@ -38,5 +39,10 @@ ln -s $(which minikube) /usr/local/bin/kubectl
 Он запросит пароль.
 
 minikube tunnel
+=======================================
+
+minikube addons enable ingress
+
+=======================================
 
 
