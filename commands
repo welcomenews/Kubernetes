@@ -104,6 +104,8 @@ kubectl taint nodes kuber-vm-2 node-role.kubernetes.io/control-plane:NoSchedule 
 - PreferNoSchedule - мягкая версия NoSchedule, контроллер будет пытаться не разместить на узле с ограничениями pod'ы без разрешений, но если ресурсов не осталось, то разместит.
 kubectl get nodes -o custom-columns=NAME:.metadata.name,ARCH:.status.nodeInfo.architecture,KERNEL:.status.nodeInfo.kernelVersion,TAINTS:.spec.taints      Проверка taint
 
+kubectl label node <имя пода> node-role.kubernetes.io/worker=worker  Добавить лейбл для worker
+
 kubectl get podmetrics                              просмотреть metrics-server, который собирает базовые метрики — cpu & memory
 kubectl get nodemetrics                             --//--
 kubectl get podmetrics <имя_пода> -o yaml           смотреть метрики конкретного пода (загрузка cpu, mem)
