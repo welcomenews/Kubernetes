@@ -1,0 +1,20 @@
+Следуйте приведенным ниже командам, чтобы сгенерировать секрет для учетных данных.
+
+Давайте создадим файл авторизации с именем пользователя и паролем.
+
+$ htpasswd -c basic-auth kibanaadmin
+New password: <kibanaadmin>
+New password:
+Re-type new password:
+Adding password for user kibanaadmin
+
+Используйте следующие аннотации в нашем манифесте ingress:
+
+kubectl -n ingress-nginx edit ingress kibana-ingress
+
+Вставьте следующие аннотации:
+nginx.ingress.kubernetes.io/auth-type: basic
+nginx.ingress.kubernetes.io/auth-secret: basic-auth
+nginx.ingress.kubernetes.io/auth-realm: "Kibana Authentication Required - kibanaadmin"
+
+Теперь, когда Ingress обновлен, снова перейдите на тот URL-адрес, и, вас  уже попросят пройти аутентификацию.
