@@ -88,7 +88,7 @@ cp values.yaml values.dev.yaml
 ## Включаем grafana, alertmanager, prometheus
 vim values.dev.yaml
 ## В prometheus домен ставлю - prometheus.final.rbr-kubernetes.com
-... добавляем аннотации basic authentication в ingress как в kub-34/values.kibana.yaml
+... добавляем аннотации basic authentication в ingress, описано в файле ingress_basic_auth или как в задании kub-34/values.kibana.yaml
 ## install chart
 helm -n monitoring upgrade --install prometheus-stack -f values.dev.yaml ./
 
